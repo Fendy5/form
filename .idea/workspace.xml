@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="474d4261-96e7-49ff-8e31-0c9221bf0bfc" name="Default Changelist" comment="" />
+    <list default="true" id="474d4261-96e7-49ff-8e31-0c9221bf0bfc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,6 +26,9 @@
         <option value="CSS File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
@@ -149,6 +157,7 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1SvrIfKpjCJ31f2vbt0leNRt3W2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="autoscrollToSource" value="true" />
@@ -217,6 +226,10 @@
       <workItem from="1575948162567" duration="408000" />
       <workItem from="1579055388734" duration="1258000" />
       <workItem from="1579784119622" duration="6023000" />
+      <workItem from="1579845190879" duration="177000" />
+      <workItem from="1579865921632" duration="491000" />
+      <workItem from="1579923009458" duration="2613000" />
+      <workItem from="1579932450566" duration="3481000" />
     </task>
     <servers />
   </component>
@@ -256,10 +269,10 @@
     </state>
     <state width="1638" height="246" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1579789307138" />
     <state width="1638" height="246" key="GridCell.Tab.0.right/0.23.1680.947@0.23.1680.947" timestamp="1579800748049" />
-    <state x="341" y="164" key="SettingsEditor" timestamp="1579055542679">
+    <state x="341" y="164" key="SettingsEditor" timestamp="1579865887923">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1579055542679" />
+    <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1579865887923" />
     <state x="505" y="248" width="670" height="675" key="run.anything.popup" timestamp="1579788631569">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

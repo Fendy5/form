@@ -26,3 +26,24 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
 
+Route::get('/test', function () {
+    //字符串拼接
+//    $str = 'I am Fendy , KaiYing is my wife';
+//    $res = Str::slug($str, '*');
+//    dd($res);
+
+    //检测数组里面的key是否存在
+//    $book = ['name'=>['Chinese'=>'我','English'=>'Me']];
+//    dd(Arr::has($book,'name.English'));
+
+    //产生唯一字符串
+//    dd(Str::uuid());
+
+//    $parents = [
+//            ['parent' => ['id' => 1, 'name' => 'James']],
+//            ['parent' => ['id' => 8, 'name' => 'Lisa']],
+//    ];
+//    dd(Arr::pluck($parents,'parent.name'));
+
+
+});

@@ -11,20 +11,26 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login.login');
+//Route::get('/', function () {
+//    return view('login.login');
+//});
+//Auth::routes();
+//
+//Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/login', 'Home\LoginController@login');
+//
+//Route::group(['middleware' => 'auth'], function () {
+//	Route::resource('user', 'UserController', ['except' => ['show']]);
+//	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+//	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+//	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+//});
+//
+Route::group(['namespace'=>'Home'], function () {
+    Route::get('/home', 'IndexController@index');
 });
-Auth::routes();
+//Route::get('/{vue}', 'Home\IndexController@index')->where('vue', '.*');
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/login', 'Home\LoginController@login');
-
-Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
-});
 
 Route::get('/test', function () {
     //字符串拼接

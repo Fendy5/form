@@ -4,11 +4,22 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+// require('./bootstrap');
 
 window.Vue = require('vue');
 
+import router from "./router";
+import App from "./components/App";
+import './plugins/element.js'
+import './plugins/vant.js';
+import 'vant/lib/index.css';
+import 'element-ui/lib/theme-chalk/index.css';
+import axios from 'axios'
+
 import '../../public/font/iconfont.css'
+import './asset/css/global.css'
+
+axios.defaults.baseURL = 'http://localhost:8088/home/';
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -20,8 +31,9 @@ import '../../public/font/iconfont.css'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('login', require('./components/home/login/Login.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('login', require('./components/home/login/Login.vue').default);
+// Vue.component('home', require('./components/home/Index').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,4 +43,6 @@ Vue.component('login', require('./components/home/login/Login.vue').default);
 
 const app = new Vue({
     el: '#app',
+    router,               // <-- register router with Vue
+    render: (h) => h(App) // <-- render App component
 });

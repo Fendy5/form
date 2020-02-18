@@ -1,5 +1,8 @@
 {
-    "/js/app.js": "/js/app.js",
+    "/js/main-home.js": "/js/main-home.js",
     "/css/app.css": "/css/app.css",
-    "/create.js": "/create.js"
+    "/js/main-login.js": "/js/main-login.js",
+    "/js/main-s.js": "/js/main-s.js",
+    "/create.js": "/create.js",
+    "/vendors~create.js": "/vendors~create.js"
 }

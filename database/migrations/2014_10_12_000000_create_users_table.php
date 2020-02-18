@@ -16,9 +16,9 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('weibo_id');
-            $table->string('wechat_id');
-            $table->string('qq_id');
+            $table->string('weibo_id')->nullable();
+            $table->string('wechat_id')->nullable();
+            $table->string('qq_id')->nullable();
             $table->string('avatar',256)->default('avatar.png');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

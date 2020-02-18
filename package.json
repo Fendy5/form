@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "element-ui": "^2.13.0",
+        "nprogress": "^0.2.0",
         "vant": "^2.4.7",
         "vue-router": "^3.1.5"
     }

@@ -126,7 +126,7 @@
                     </div>
                 </div>
                     <div style="margin: 20px 0;text-align: center">
-                        <el-button>预览</el-button>
+                        <el-button @click="saveDate">预览</el-button>
                         <el-button type="primary">保存并发放</el-button>
                 </div>
             </div>
@@ -135,6 +135,8 @@
 </template>
 
 <script>
+import {AxiosInstance as Axios} from "axios";
+
 export default {
   data () {
       return {
@@ -244,6 +246,12 @@ export default {
             if (currentIndex !== -1) {
                 this.form.content[index].select.splice(currentIndex, 1);
             }
+        },
+        async saveDate() {
+            console.log(123);
+            let res = await this.$http.post('save_data', this.form);
+            if (res.status !== 200) return this.$message.error('提交失败');
+            console.log(res);
         }
     }
 }

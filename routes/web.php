@@ -26,11 +26,25 @@
 //	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 //});
 //
-Route::group(['namespace'=>'Home'], function () {
-    Route::get('/home', 'IndexController@index');
+use App\Models\Form;
+
+Route::get('/login', 'Home\LoginController@login');
+Route::post('/login', 'Home\LoginController@login_post');
+Route::post('/sign_up', 'Home\LoginController@sign_up');
+
+
+Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
+    Route::get('/', 'IndexController@index');
+    Route::get('/logout', 'LoginController@logout');
 });
 //Route::get('/{vue}', 'Home\IndexController@index')->where('vue', '.*');
 
+Route::group(['namespace'=>'Home','prefix'=>'api'], function () {
+    Route::post('save_data', 'FormController@saveData');
+});
+
+Route::get('/s/{id}','Home\FormController@display');
+Route::post('/s','Home\FormController@getData');
 
 Route::get('/test', function () {
     //字符串拼接
@@ -50,6 +64,6 @@ Route::get('/test', function () {
 //            ['parent' => ['id' => 8, 'name' => 'Lisa']],
 //    ];
 //    dd(Arr::pluck($parents,'parent.name'));
-
-
+    $res=DB::table('forms') ->where('content->[*]->select->[*]->key', '15810542257241')->get();
+    ddd($res);
 });

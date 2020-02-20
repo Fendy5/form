@@ -27,6 +27,7 @@
 //});
 //
 use App\Models\Form;
+use function EasyWeChat\Kernel\Support\str_random;
 
 Route::get('/login', 'Home\LoginController@login');
 Route::post('/login', 'Home\LoginController@login_post');
@@ -35,16 +36,13 @@ Route::post('/sign_up', 'Home\LoginController@sign_up');
 
 Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::get('/', 'IndexController@index');
-    Route::get('/logout', 'LoginController@logout');
-});
-//Route::get('/{vue}', 'Home\IndexController@index')->where('vue', '.*');
-
-Route::group(['namespace'=>'Home','prefix'=>'api'], function () {
     Route::post('save_data', 'FormController@saveData');
+    Route::get('/logout', 'LoginController@logout');
 });
 
 Route::get('/s/{id}','Home\FormController@display');
 Route::post('/s','Home\FormController@getData');
+Route::post('/submit_answer','Home\FormController@submitAnswer');
 
 Route::get('/test', function () {
     //字符串拼接
@@ -57,13 +55,14 @@ Route::get('/test', function () {
 //    dd(Arr::has($book,'name.English'));
 
     //产生唯一字符串
-//    dd(Str::uuid());
+    dd(Str::uuid());
 
 //    $parents = [
 //            ['parent' => ['id' => 1, 'name' => 'James']],
 //            ['parent' => ['id' => 8, 'name' => 'Lisa']],
 //    ];
 //    dd(Arr::pluck($parents,'parent.name'));
-    $res=DB::table('forms') ->where('content->[*]->select->[*]->key', '15810542257241')->get();
-    ddd($res);
+//    $res=DB::table('forms') ->where('content->[*]->select->[*]->key', '15810542257241')->get();
+//    ddd($res);
+//    dd(str_random(16));
 });

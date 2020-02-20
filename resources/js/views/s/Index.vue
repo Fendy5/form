@@ -1,32 +1,45 @@
 <template>
   <div class="app">
-    <div v-if="loading" class="loading">
-      <van-loading size="36" color="#1989fa"/>
+    <div v-if="status===0" class="loading">
+      <van-loading size="36" />
     </div>
-    <div v-else class="preview-main">
+    <div v-else-if="status===1" class="preview-main">
       <h2>{{form.title}}</h2>
+
       <div v-for="(items,index) in form.content" :key="index" class="preview-item">
-        <van-checkbox-group v-model="answer" v-if="items.type !== 'textarea'" :max="2">
-          <div class="preview-title">{{index+1}}、{{items.title}}({{questionType[items.type]}})</div>
-          <van-cell-group class="choose" v-for="(item,idx) in items.select" clickable :key="idx">
-            <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.value" clickable @click="radio = '2'">
-              <van-radio slot="right-icon" name="2"/>
+        <van-radio-group  v-model="answer.content[index].options[0]" v-if="items.type === 'single-choose'" >
+
+          <div class="preview-title">
+            {{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})
+<!--            <span v-if="items.required " class="require-info">选项必填</span>-->
+          </div>
+          <van-cell-group class="choose" v-for="(item,idx) in items.options"  :key="idx">
+            <van-cell clickable  @click="saveOptions(item,index)" :title="item|title(idx)" >
+              <van-radio slot="right-icon" :name="item" />
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+
+        <div v-else-if="items.type==='textarea'" class="textarea">
+          <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}</div>
+          <van-field  v-model="answer.content[index].text" type="textarea" placeholder="请输入内容"
+            :rows="items.row" autosize
+          />
+        </div>
+
+        <van-checkbox-group v-else v-model="answer.content[index].options">
+          <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})</div>
+          <van-cell-group v-for="(item,idx) in items.options"  :key="idx">
+            <van-cell clickable :title="item|title(idx)" @click="saveMulOptions('ref'+items.id,idx)">
+              <van-checkbox slot="right-icon" :name="item" :ref="'ref'+items.id" />
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
-        <div v-else class="textarea">
-          <div class="preview-title">{{index+1}}、{{items.title}}</div>
-          <van-field
-            :rows="5"
-            autosize
-            label="答案"
-            type="textarea"
-            placeholder="请输入答案"
-          />
-        </div>
+
       </div>
+
       <div class="btn">
-        <van-button type="primary" size="large">提交</van-button>
+        <van-button loading-text="提交中..." :loading="submitting"  @click="submitAnswer" type="primary" size="large">提交</van-button>
       </div>
       <div class="copyright">
         <div>Copyright © 2020 Fendy</div>
@@ -35,58 +48,119 @@
         </div>
       </div>
     </div>
+    <div  class="finish" v-else>
+      问卷到此结束，感谢你的参与！
+    </div>
   </div>
 </template>
 
 <script>
+  import Notify from "vant/lib/notify";
+
   export default {
     data() {
       return {
-        form: '',
-        loading: true,
+        radio: '',
+        form: {
+          id: '',
+          title: '',
+          content:[],
+        },
+        status: 0,  //0加载中、1加载完成、2问卷已完成
         answer: {
-          "id": "WSAw",
-          "content": [{
-            "type": "radio",
-            "id": "q-1-sIyL",
-            "title": "题目",
-            "required": true,
-            "options": [
-              {
-                "id": "o-100-ABCD",
-                "noRandom": false,
-                "text": "<p>选项</p>\n"
-              }
-            ]
-          }]
+          "content": []
         },
         questionType: {
           'single-choose': '单选',
           'mul-choose': '多选',
           'random-choose': '不定选',
-          'textarea': '文本类型'
-        }
+          'textarea': '文本题'
+        },
+        submitting:false
+      }
+    },
+    methods: {
+      verify(index) {
+        let item = this.answer.content[index];
+        if (item.type!=='textarea')
+          return this.answer.content[index].options !== null;
+        else
+          return this.answer.content[index].text !== null;
+      },
+      initAnswer(content) {
+        return content.map((value)=>{
+          let json = {};
+          json.type = value.type;
+          json.title = value.title;
+          json.id= value.id;
+          if (json.type!=='textarea')
+            json.options = [];
+          else
+            json.text = '';
+          return json;
+        })
+      },
+      saveOptions(value,index) {
+        this.answer.content[index].options=[value]
+      },
+      saveMulOptions(id,index) {
+        this.$refs[id][index].toggle();
+      },
+      submitAnswer() {
+        this.submitting=true;
+        this.$http.post('submit_answer', this.answer)
+          .then((res) => {
+            this.submitting = false;
+            if (res.data.code === 1) {
+              this.submitting = false;
+              Notify({ type: 'success', message: res.data.msg });
+              this.status = 2;
+            } else {
+              this.submitting = false;
+              Notify({ type: 'danger', message: res.data.msg });
+            }
+          }).catch((error) => {
+          this.submitting = false;
+          console.log(error)
+        });
       }
     },
     created() {
       this.$http.post('s', {id: this.id}).then((res) => {
         this.form = res.data;
-        this.loading = false;
+        this.status = 1;
+        this.answer.id = res.data.id;
+        this.answer.content=this.initAnswer(res.data.content)
       });
       this.form = this.id;
     },
     props: ['id'],
-    methods: {
-      toggle(index) {
-        this.$refs.checkboxes[index].toggle();
+    filters: {
+      title(item,index) {
+        return String.fromCharCode(64 + parseInt(index+1))+'、'+item.text
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .preview-main {
+  .finish {
+    font-size: larger;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    top: 50px;
+    margin: 50% 0;
+    color: wheat;
+  }
 
+  .require-info {
+    color: red;
+    font-size: 12px;
+  }
+
+  .require {
+    color: red;
   }
 
   h2 {

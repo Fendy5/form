@@ -1,12 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-const Form = () => import(/* webpackChunkName: "create" */ '../components/home/create/Form');
-const Question = () => import(/* webpackChunkName: "create" */ '../components/home/create/Question');
-const Exam = () => import(/* webpackChunkName: "create" */ '../components/home/create/Exam');
-const Vote = () => import(/* webpackChunkName: "create" */ '../components/home/create/Vote');
+const Form = () => import(/* webpackChunkName: "create" */ '../views/create/Form');
+const Question = () => import(/* webpackChunkName: "create" */ '../views/create/Question');
+const Exam = () => import(/* webpackChunkName: "create" */ '../views/create/Exam');
+const Vote = () => import(/* webpackChunkName: "create" */ '../views/create/Vote');
 
-import Create from "../components/home/Create";
+import Create from "@/layout/Create";
 
 Vue.use(VueRouter);
 

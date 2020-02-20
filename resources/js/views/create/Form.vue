@@ -14,7 +14,7 @@
             <div id="main">
                 <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm">
                     <el-card>
-                        <el-form-item :rules="rules.title" label="标题" prop="title">
+                        <el-form-item placeholder="请输入标题" :rules="rules.title" label="标题" prop="title">
                             <el-input v-model="form.title"></el-input>
                         </el-form-item>
                     </el-card>
@@ -28,9 +28,9 @@
                                 </el-form-item>
                                 <el-form-item
                                     :label="'选项'"
-                                    v-for="item in items.select"
-                                    :key="item.key">
-                                    <el-input v-model="item.value">
+                                    v-for="item in items.options"
+                                    :key="item.id">
+                                    <el-input v-model="item.text">
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
                                 </el-form-item>
@@ -47,9 +47,9 @@
                                 </el-form-item>
                                 <el-form-item
                                     :label="'选项'"
-                                    v-for="item in items.select"
-                                    :key="item.key">
-                                    <el-input v-model="item.value">
+                                    v-for="item in items.options"
+                                    :key="item.id">
+                                    <el-input v-model="item.text">
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
                                 </el-form-item>
@@ -66,9 +66,9 @@
                                 </el-form-item>
                                 <el-form-item
                                     :label="'选项'"
-                                    v-for="item in items.select"
-                                    :key="item.key">
-                                    <el-input v-model="item.value">
+                                    v-for="item in items.options"
+                                    :key="item.id">
+                                    <el-input v-model="item.text">
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
                                 </el-form-item>
@@ -79,7 +79,7 @@
                             </el-card>
                             <el-card v-if="items.type==='textarea'">
                                 <el-form-item
-                                    :label="'文本域标题'">
+                                    :label="'文本题'">
                                     <el-input v-model="form.content[index].title">
                                     </el-input>
                                 </el-form-item>
@@ -106,8 +106,8 @@
                     <div v-for="(items,index) in form.content" :key="index" class="preview-item">
                         <van-radio-group v-if="items.type !== 'textarea'">
                             <div class="preview-title">{{index+1}}、{{items.title}}</div>
-                            <van-cell-group  v-for="(item,idx) in items.select" :key="idx">
-                                <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.value" clickable @click="radio = '2'">
+                            <van-cell-group  v-for="(item,idx) in items.options" :key="idx">
+                                <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.text" clickable @click="radio = '2'">
                                     <van-radio slot="right-icon" name="2" />
                                 </van-cell>
                             </van-cell-group>
@@ -135,19 +135,17 @@
 </template>
 
 <script>
-import {AxiosInstance as Axios} from "axios";
-
 export default {
   data () {
       return {
           form: {
-              title: '调查问卷的内容~',
-              content: [{"type":"single-choose","title":"你喜欢我吗？","select":[{"key":"15810542257241","value":"不喜欢"},{"key":"15810542257242","value":"喜欢鸭"},{"key":"15810542257243","value":"说不准"},{"value":"爱你个大头鬼","key":"1581054257149"}]},{"type":"random-choose","title":"不定选题目","select":[{"key":"15810542704111","value":""},{"key":"15810542704112","value":""},{"key":"15810542704113","value":""}]},{"type":"textarea","title":"文本类型题目","row":"5"},{"type":"random-choose","title":"不定选题目","select":[{"key":"15810542767771","value":""},{"key":"15810542767772","value":""},{"key":"15810542767773","value":""}]}]
+              title: '',
+              content: []
           },
           rules: {
               title: [
                   { required: true, message: '请输入标题', trigger: 'blur' },
-                  { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                  { min: 1, max: 32, message: '长度在 3 到 5 个字符', trigger: 'blur' }
               ],
               question: [
                   { required: true, message: '请输入题目', trigger: 'blur' },
@@ -157,102 +155,108 @@ export default {
       };
   },
     methods: {
-        formRef () {
-            this.$refs.formRef.resetFields()
-        },
-        simpleChoose() {
-            this.form.content.push({
-                "type": "single-choose",
-                "title": "单题目",
-                "select": [
-                    {
-                        "key": Date.now().toString()+1,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+2,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+3,
-                        "value": ""
-                    }
-                ]
-            },);
-        },
-        mulChoose() {
-            this.form.content.push({
-                "type": "mul-choose",
-                "title": "多选题目",
-                "select": [
-                    {
-                        "key": Date.now().toString()+1,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+2,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+3,
-                        "value": ""
-                    }
-                ]
-            },);
-        },
-        textarea() {
-            this.form.content.push({
-                "type": "textarea",
-                "title": "文本类型题目",
-                "row": "2"
-            })
-        },
-        randomChoose() {
-            this.form.content.push({
-                "type": "random-choose",
-                "title": "不定选题目",
-                "select": [
-                    {
-                        "key": Date.now().toString()+1,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+2,
-                        "value": ""
-                    },
-                    {
-                        "key": Date.now().toString()+3,
-                        "value": ""
-                    }
-                ]
-            },);
-        },
-        addChoose(index) {
-            this.form.content[index].select.push({
-                value: '',
-                key: Date.now().toString()
-            })
-        },
-        removeQuestion(item,index) {
-            let currentIndex = this.form.content.indexOf(item);
-            if (currentIndex !== -1) {
-                this.form.content.splice(currentIndex, 1);
-            }
-        },
-        removeChoose(item,index) {
-            console.log("index:" + index);
-            console.log(item);
-            let currentIndex = this.form.content[index].select.indexOf(item);
-            if (currentIndex !== -1) {
-                this.form.content[index].select.splice(currentIndex, 1);
-            }
-        },
-        async saveDate() {
-            console.log(123);
-            let res = await this.$http.post('save_data', this.form);
-            if (res.status !== 200) return this.$message.error('提交失败');
-            console.log(res);
-        }
+      formRef () {
+          this.$refs.formRef.resetFields()
+      },
+      simpleChoose() {
+          this.form.content.push({
+              "type": "single-choose",
+              "id": this.createRandomStr(),
+              "title": "",
+              "required": true,
+              "options": [
+                  {
+                      "id": Date.now().toString()+1,
+                      "text": ""
+                  },
+                  {
+                      "id": Date.now().toString()+2,
+                      "text": ""
+                  }
+              ]
+          },);
+      },
+      mulChoose() {
+        this.form.content.push({
+          "id": this.createRandomStr(),
+          "type": "mul-choose",
+          "title": "",
+          "required": true,
+          "options": [
+              {
+                  "id": Date.now().toString()+1,
+                  "text": ""
+              },
+              {
+                  "id": Date.now().toString()+2,
+                  "text": ""
+              },
+              {
+                  "id": Date.now().toString()+3,
+                  "text": ""
+              }
+          ]
+      },);
+      },
+      textarea() {
+          this.form.content.push({
+            "type": "textarea",
+            "title": "",
+            "row": "2",
+            "id": this.createRandomStr(),
+          })
+      },
+      randomChoose() {
+          this.form.content.push({
+            "type": "random-choose",
+            "id": this.createRandomStr(),
+            "title": "",
+            "required": true,
+            "options": [
+                {
+                    "id": Date.now().toString()+1,
+                    "text": ""
+                },
+                {
+                    "id": Date.now().toString()+2,
+                    "text": ""
+                },
+                {
+                    "id": Date.now().toString()+3,
+                    "text": ""
+                }
+              ]
+          },);
+      },
+      addChoose(index) {
+          this.form.content[index].options.push({
+              text: '',
+              id: Date.now().toString()
+          })
+      },
+      removeQuestion(item,index) {
+          let currentIndex = this.form.content.indexOf(item);
+          if (currentIndex !== -1) {
+              this.form.content.splice(currentIndex, 1);
+          }
+      },
+      removeChoose(item,index) {
+          console.log("index:" + index);
+          console.log(item);
+          let currentIndex = this.form.content[index].options.indexOf(item);
+          if (currentIndex !== -1) {
+              this.form.content[index].options.splice(currentIndex, 1);
+          }
+      },
+      async saveDate() {
+          console.log(123);
+          let res = await this.$http.post('save_data', this.form);
+          if (res.status !== 200) return this.$message.error('提交失败');
+          console.log(res);
+      },
+      createRandomStr() {
+        return Math.random().toString(36).slice(-8)
+      }
     }
 }
 </script>

@@ -116,6 +116,52 @@ function _extends() {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/extends.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/extends.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _extends() {
+  module.exports = _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/interopRequireDefault.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    "default": obj
+  };
+}
+
+module.exports = _interopRequireDefault;
+
+/***/ }),
+
 /***/ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js ***!
@@ -1951,6 +1997,8 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vant_lib_notify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vant/lib/notify */ "./node_modules/vant/lib/notify/index.js");
+/* harmony import */ var vant_lib_notify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vant_lib_notify__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1991,48 +2039,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      form: '',
-      loading: true,
+      radio: '',
+      form: {
+        id: '',
+        title: '',
+        content: []
+      },
+      status: 0,
+      //0加载中、1加载完成、2问卷已完成
       answer: {
-        "id": "WSAw",
-        "content": [{
-          "type": "radio",
-          "id": "q-1-sIyL",
-          "title": "题目",
-          "required": true,
-          "options": [{
-            "id": "o-100-ABCD",
-            "noRandom": false,
-            "text": "<p>选项</p>\n"
-          }]
-        }]
+        "content": []
       },
       questionType: {
         'single-choose': '单选',
         'mul-choose': '多选',
         'random-choose': '不定选',
-        'textarea': '文本类型'
-      }
+        'textarea': '文本题'
+      },
+      submitting: false
     };
   },
+  methods: {
+    verify: function verify(index) {
+      var item = this.answer.content[index];
+      if (item.type !== 'textarea') return this.answer.content[index].options !== null;else return this.answer.content[index].text !== null;
+    },
+    initAnswer: function initAnswer(content) {
+      return content.map(function (value) {
+        var json = {};
+        json.type = value.type;
+        json.title = value.title;
+        json.id = value.id;
+        if (json.type !== 'textarea') json.options = [];else json.text = '';
+        return json;
+      });
+    },
+    saveOptions: function saveOptions(value, index) {
+      this.answer.content[index].options = [value];
+    },
+    saveMulOptions: function saveMulOptions(id, index) {
+      this.$refs[id][index].toggle();
+    },
+    submitAnswer: function submitAnswer() {
+      var _this = this;
+
+      this.submitting = true;
+      this.$http.post('submit_answer', this.answer).then(function (res) {
+        _this.submitting = false;
+
+        if (res.data.code === 1) {
+          _this.submitting = false;
+          vant_lib_notify__WEBPACK_IMPORTED_MODULE_0___default()({
+            type: 'success',
+            message: res.data.msg
+          });
+          _this.status = 2;
+        } else {
+          _this.submitting = false;
+          vant_lib_notify__WEBPACK_IMPORTED_MODULE_0___default()({
+            type: 'danger',
+            message: res.data.msg
+          });
+        }
+      })["catch"](function (error) {
+        _this.submitting = false;
+        console.log(error);
+      });
+    }
+  },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.$http.post('s', {
       id: this.id
     }).then(function (res) {
-      _this.form = res.data;
-      _this.loading = false;
+      _this2.form = res.data;
+      _this2.status = 1;
+      _this2.answer.id = res.data.id;
+      _this2.answer.content = _this2.initAnswer(res.data.content);
     });
     this.form = this.id;
   },
   props: ['id'],
-  methods: {
-    toggle: function toggle(index) {
-      this.$refs.checkboxes[index].toggle();
+  filters: {
+    title: function title(item, index) {
+      return String.fromCharCode(64 + parseInt(index + 1)) + '、' + item.text;
     }
   }
 });
@@ -2051,7 +2162,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "h2[data-v-897ee532] {\n  text-align: center;\n}\n.preview-item[data-v-897ee532] {\n  border-radius: 5px;\n  background-color: #ffffff;\n  padding: 10px 0;\n  margin: 10px;\n}\n.preview-title[data-v-897ee532] {\n  margin: 0;\n  padding: 10px 16px 16px;\n  color: rgba(69, 90, 100, 0.6);\n  font-weight: normal;\n  font-size: 14px;\n  line-height: 16px;\n  text-align: left;\n}\n.el-card[data-v-897ee532] {\n  margin-bottom: 20px;\n}\n.choose[data-v-897ee532] {\n  padding-left: 15px;\n}\n.loading[data-v-897ee532] {\n  border-radius: 5px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n}\n.btn[data-v-897ee532] {\n  width: 80%;\n  margin: 15px auto;\n  text-align: center;\n}\n.copyright[data-v-897ee532] {\n  padding: 32px 0 40px;\n  text-align: center;\n  color: rgba(0, 0, 0, 0.3);\n  position: relative;\n  z-index: 10;\n  font-size: 14px;\n}", ""]);
+exports.push([module.i, ".finish[data-v-897ee532] {\n  font-size: larger;\n  width: 100%;\n  text-align: center;\n  position: relative;\n  top: 50px;\n  margin: 50% 0;\n  color: wheat;\n}\n.require-info[data-v-897ee532] {\n  color: red;\n  font-size: 12px;\n}\n.require[data-v-897ee532] {\n  color: red;\n}\nh2[data-v-897ee532] {\n  text-align: center;\n}\n.preview-item[data-v-897ee532] {\n  border-radius: 5px;\n  background-color: #ffffff;\n  padding: 10px 0;\n  margin: 10px;\n}\n.preview-title[data-v-897ee532] {\n  margin: 0;\n  padding: 10px 16px 16px;\n  color: rgba(69, 90, 100, 0.6);\n  font-weight: normal;\n  font-size: 14px;\n  line-height: 16px;\n  text-align: left;\n}\n.el-card[data-v-897ee532] {\n  margin-bottom: 20px;\n}\n.choose[data-v-897ee532] {\n  padding-left: 15px;\n}\n.loading[data-v-897ee532] {\n  border-radius: 5px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n}\n.btn[data-v-897ee532] {\n  width: 80%;\n  margin: 15px auto;\n  text-align: center;\n}\n.copyright[data-v-897ee532] {\n  padding: 32px 0 40px;\n  text-align: center;\n  color: rgba(0, 0, 0, 0.3);\n  position: relative;\n  z-index: 10;\n  font-size: 14px;\n}", ""]);
 
 // exports
 
@@ -22468,6 +22579,93 @@ function isIOS() {
 
 /***/ }),
 
+/***/ "./node_modules/vant/lib/icon/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/vant/lib/icon/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _babelHelperVueJsxMergeProps = _interopRequireDefault(__webpack_require__(/*! @vue/babel-helper-vue-jsx-merge-props */ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js"));
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _functional = __webpack_require__(/*! ../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+var _info = _interopRequireDefault(__webpack_require__(/*! ../info */ "./node_modules/vant/lib/info/index.js"));
+
+// Utils
+// Components
+var _createNamespace = (0, _utils.createNamespace)('icon'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+function isImage(name) {
+  return name ? name.indexOf('/') !== -1 : false;
+} // compatible with legacy usage, should be removed in next major version
+
+
+var LEGACY_MAP = {
+  medel: 'medal',
+  'medel-o': 'medal-o'
+};
+
+function correctName(name) {
+  return name && LEGACY_MAP[name] || name;
+}
+
+function Icon(h, props, slots, ctx) {
+  var name = correctName(props.name);
+  var imageIcon = isImage(name);
+  return h(props.tag, (0, _babelHelperVueJsxMergeProps.default)([{
+    "class": [props.classPrefix, imageIcon ? '' : props.classPrefix + "-" + name],
+    "style": {
+      color: props.color,
+      fontSize: (0, _utils.addUnit)(props.size)
+    }
+  }, (0, _functional.inherit)(ctx, true)]), [slots.default && slots.default(), imageIcon && h("img", {
+    "class": bem('image'),
+    "attrs": {
+      "src": name
+    }
+  }), h(_info.default, {
+    "attrs": {
+      "dot": props.dot,
+      "info": props.info
+    }
+  })]);
+}
+
+Icon.props = {
+  dot: Boolean,
+  name: String,
+  size: [Number, String],
+  info: [Number, String],
+  color: String,
+  tag: {
+    type: String,
+    default: 'i'
+  },
+  classPrefix: {
+    type: String,
+    default: bem()
+  }
+};
+
+var _default = createComponent(Icon);
+
+exports.default = _default;
+
+/***/ }),
+
 /***/ "./node_modules/vant/lib/index.css":
 /*!*****************************************!*\
   !*** ./node_modules/vant/lib/index.css ***!
@@ -22495,6 +22693,1935 @@ var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./n
 if(content.locals) module.exports = content.locals;
 
 if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/info/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/vant/lib/info/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _babelHelperVueJsxMergeProps = _interopRequireDefault(__webpack_require__(/*! @vue/babel-helper-vue-jsx-merge-props */ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js"));
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _functional = __webpack_require__(/*! ../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+// Utils
+var _createNamespace = (0, _utils.createNamespace)('info'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+function Info(h, props, slots, ctx) {
+  var dot = props.dot,
+      info = props.info;
+  var showInfo = (0, _utils.isDef)(info) && info !== '';
+
+  if (!dot && !showInfo) {
+    return;
+  }
+
+  return h("div", (0, _babelHelperVueJsxMergeProps.default)([{
+    "class": bem({
+      dot: dot
+    })
+  }, (0, _functional.inherit)(ctx, true)]), [dot ? '' : props.info]);
+}
+
+Info.props = {
+  dot: Boolean,
+  info: [Number, String]
+};
+
+var _default = createComponent(Info);
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/locale/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/vant/lib/locale/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _deepAssign = __webpack_require__(/*! ../utils/deep-assign */ "./node_modules/vant/lib/utils/deep-assign.js");
+
+var _zhCN = _interopRequireDefault(__webpack_require__(/*! ./lang/zh-CN */ "./node_modules/vant/lib/locale/lang/zh-CN.js"));
+
+var proto = _vue.default.prototype;
+var defineReactive = _vue.default.util.defineReactive;
+defineReactive(proto, '$vantLang', 'zh-CN');
+defineReactive(proto, '$vantMessages', {
+  'zh-CN': _zhCN.default
+});
+var _default = {
+  messages: function messages() {
+    return proto.$vantMessages[proto.$vantLang];
+  },
+  use: function use(lang, messages) {
+    var _this$add;
+
+    proto.$vantLang = lang;
+    this.add((_this$add = {}, _this$add[lang] = messages, _this$add));
+  },
+  add: function add(messages) {
+    if (messages === void 0) {
+      messages = {};
+    }
+
+    (0, _deepAssign.deepAssign)(proto.$vantMessages, messages);
+  }
+};
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/locale/lang/zh-CN.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vant/lib/locale/lang/zh-CN.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = void 0;
+var _default = {
+  name: '姓名',
+  tel: '电话',
+  save: '保存',
+  confirm: '确认',
+  cancel: '取消',
+  delete: '删除',
+  complete: '完成',
+  loading: '加载中...',
+  telEmpty: '请填写电话',
+  nameEmpty: '请填写姓名',
+  nameInvalid: '请输入正确的姓名',
+  confirmDelete: '确定要删除吗',
+  telInvalid: '请输入正确的手机号',
+  vanCalendar: {
+    end: '结束',
+    start: '开始',
+    title: '日期选择',
+    confirm: '确定',
+    weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+    monthTitle: function monthTitle(year, month) {
+      return year + "\u5E74" + month + "\u6708";
+    },
+    rangePrompt: function rangePrompt(maxRange) {
+      return "\u9009\u62E9\u5929\u6570\u4E0D\u80FD\u8D85\u8FC7 " + maxRange + " \u5929";
+    }
+  },
+  vanContactCard: {
+    addText: '添加联系人'
+  },
+  vanContactList: {
+    addText: '新建联系人'
+  },
+  vanPagination: {
+    prev: '上一页',
+    next: '下一页'
+  },
+  vanPullRefresh: {
+    pulling: '下拉即可刷新...',
+    loosing: '释放即可刷新...'
+  },
+  vanSubmitBar: {
+    label: '合计：'
+  },
+  vanCoupon: {
+    unlimited: '无使用门槛',
+    discount: function discount(_discount) {
+      return _discount + "\u6298";
+    },
+    condition: function condition(_condition) {
+      return "\u6EE1" + _condition + "\u5143\u53EF\u7528";
+    }
+  },
+  vanCouponCell: {
+    title: '优惠券',
+    tips: '暂无可用',
+    count: function count(_count) {
+      return _count + "\u5F20\u53EF\u7528";
+    }
+  },
+  vanCouponList: {
+    empty: '暂无优惠券',
+    exchange: '兑换',
+    close: '不使用优惠券',
+    enable: '可用',
+    disabled: '不可用',
+    placeholder: '请输入优惠码'
+  },
+  vanAddressEdit: {
+    area: '地区',
+    postal: '邮政编码',
+    areaEmpty: '请选择地区',
+    addressEmpty: '请填写详细地址',
+    postalEmpty: '邮政编码格式不正确',
+    defaultAddress: '设为默认收货地址',
+    telPlaceholder: '收货人手机号',
+    namePlaceholder: '收货人姓名',
+    areaPlaceholder: '选择省 / 市 / 区'
+  },
+  vanAddressEditDetail: {
+    label: '详细地址',
+    placeholder: '街道门牌、楼层房间号等信息'
+  },
+  vanAddressList: {
+    add: '新增地址'
+  }
+};
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/bind-event.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/bind-event.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.BindEventMixin = BindEventMixin;
+
+var _event = __webpack_require__(/*! ../utils/dom/event */ "./node_modules/vant/lib/utils/dom/event.js");
+
+/**
+ * Bind event when mounted or activated
+ */
+function BindEventMixin(handler) {
+  function bind() {
+    if (!this.binded) {
+      handler.call(this, _event.on, true);
+      this.binded = true;
+    }
+  }
+
+  function unbind() {
+    if (this.binded) {
+      handler.call(this, _event.off, false);
+      this.binded = false;
+    }
+  }
+
+  return {
+    mounted: bind,
+    activated: bind,
+    deactivated: unbind,
+    beforeDestroy: unbind
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/close-on-popstate.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/close-on-popstate.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.CloseOnPopstateMixin = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _event = __webpack_require__(/*! ../utils/dom/event */ "./node_modules/vant/lib/utils/dom/event.js");
+
+var _bindEvent = __webpack_require__(/*! ./bind-event */ "./node_modules/vant/lib/mixins/bind-event.js");
+
+var CloseOnPopstateMixin = _vue.default.extend({
+  mixins: [(0, _bindEvent.BindEventMixin)(function (bind, isBind) {
+    this.handlePopstate(isBind && this.closeOnPopstate);
+  })],
+  props: {
+    closeOnPopstate: Boolean
+  },
+  data: function data() {
+    return {
+      bindStatus: false
+    };
+  },
+  watch: {
+    closeOnPopstate: function closeOnPopstate(val) {
+      this.handlePopstate(val);
+    }
+  },
+  methods: {
+    handlePopstate: function handlePopstate(bind) {
+      /* istanbul ignore if */
+      if (this.$isServer) {
+        return;
+      }
+
+      if (this.bindStatus !== bind) {
+        this.bindStatus = bind;
+        var action = bind ? _event.on : _event.off;
+        action(window, 'popstate', this.close);
+      }
+    }
+  }
+});
+
+exports.CloseOnPopstateMixin = CloseOnPopstateMixin;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/popup/context.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/popup/context.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.context = void 0;
+var context = {
+  zIndex: 2000,
+  lockCount: 0,
+  stack: [],
+
+  get top() {
+    return this.stack[this.stack.length - 1];
+  }
+
+};
+exports.context = context;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/popup/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/popup/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.PopupMixin = PopupMixin;
+exports.popupMixinProps = void 0;
+
+var _context = __webpack_require__(/*! ./context */ "./node_modules/vant/lib/mixins/popup/context.js");
+
+var _overlay = __webpack_require__(/*! ./overlay */ "./node_modules/vant/lib/mixins/popup/overlay.js");
+
+var _event = __webpack_require__(/*! ../../utils/dom/event */ "./node_modules/vant/lib/utils/dom/event.js");
+
+var _node = __webpack_require__(/*! ../../utils/dom/node */ "./node_modules/vant/lib/utils/dom/node.js");
+
+var _scroll = __webpack_require__(/*! ../../utils/dom/scroll */ "./node_modules/vant/lib/utils/dom/scroll.js");
+
+var _touch = __webpack_require__(/*! ../touch */ "./node_modules/vant/lib/mixins/touch.js");
+
+var _portal = __webpack_require__(/*! ../portal */ "./node_modules/vant/lib/mixins/portal.js");
+
+var _closeOnPopstate = __webpack_require__(/*! ../close-on-popstate */ "./node_modules/vant/lib/mixins/close-on-popstate.js");
+
+// Context
+// Utils
+// Mixins
+var popupMixinProps = {
+  // whether to show popup
+  value: Boolean,
+  // whether to show overlay
+  overlay: Boolean,
+  // overlay custom style
+  overlayStyle: Object,
+  // overlay custom class name
+  overlayClass: String,
+  // whether to close popup when click overlay
+  closeOnClickOverlay: Boolean,
+  // z-index
+  zIndex: [Number, String],
+  // prevent body scroll
+  lockScroll: {
+    type: Boolean,
+    default: true
+  },
+  // whether to lazy render
+  lazyRender: {
+    type: Boolean,
+    default: true
+  }
+};
+exports.popupMixinProps = popupMixinProps;
+
+function PopupMixin(options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  return {
+    mixins: [_touch.TouchMixin, _closeOnPopstate.CloseOnPopstateMixin, (0, _portal.PortalMixin)({
+      afterPortal: function afterPortal() {
+        if (this.overlay) {
+          (0, _overlay.updateOverlay)();
+        }
+      }
+    })],
+    props: popupMixinProps,
+    data: function data() {
+      return {
+        inited: this.value
+      };
+    },
+    computed: {
+      shouldRender: function shouldRender() {
+        return this.inited || !this.lazyRender;
+      }
+    },
+    watch: {
+      value: function value(val) {
+        var type = val ? 'open' : 'close';
+        this.inited = this.inited || this.value;
+        this[type]();
+
+        if (!options.skipToggleEvent) {
+          this.$emit(type);
+        }
+      },
+      overlay: 'renderOverlay'
+    },
+    mounted: function mounted() {
+      if (this.value) {
+        this.open();
+      }
+    },
+
+    /* istanbul ignore next */
+    activated: function activated() {
+      if (this.shouldReopen) {
+        this.$emit('input', true);
+        this.shouldReopen = false;
+      }
+    },
+    beforeDestroy: function beforeDestroy() {
+      this.close();
+
+      if (this.getContainer) {
+        (0, _node.removeNode)(this.$el);
+      }
+    },
+
+    /* istanbul ignore next */
+    deactivated: function deactivated() {
+      if (this.value) {
+        this.close();
+        this.shouldReopen = true;
+      }
+    },
+    methods: {
+      open: function open() {
+        /* istanbul ignore next */
+        if (this.$isServer || this.opened) {
+          return;
+        } // cover default zIndex
+
+
+        if (this.zIndex !== undefined) {
+          _context.context.zIndex = this.zIndex;
+        }
+
+        this.opened = true;
+        this.renderOverlay();
+
+        if (this.lockScroll) {
+          (0, _event.on)(document, 'touchstart', this.touchStart);
+          (0, _event.on)(document, 'touchmove', this.onTouchMove);
+
+          if (!_context.context.lockCount) {
+            document.body.classList.add('van-overflow-hidden');
+          }
+
+          _context.context.lockCount++;
+        }
+      },
+      close: function close() {
+        if (!this.opened) {
+          return;
+        }
+
+        if (this.lockScroll) {
+          _context.context.lockCount--;
+          (0, _event.off)(document, 'touchstart', this.touchStart);
+          (0, _event.off)(document, 'touchmove', this.onTouchMove);
+
+          if (!_context.context.lockCount) {
+            document.body.classList.remove('van-overflow-hidden');
+          }
+        }
+
+        this.opened = false;
+        (0, _overlay.closeOverlay)(this);
+        this.$emit('input', false);
+      },
+      onTouchMove: function onTouchMove(event) {
+        this.touchMove(event);
+        var direction = this.deltaY > 0 ? '10' : '01';
+        var el = (0, _scroll.getScroller)(event.target, this.$el);
+        var scrollHeight = el.scrollHeight,
+            offsetHeight = el.offsetHeight,
+            scrollTop = el.scrollTop;
+        var status = '11';
+        /* istanbul ignore next */
+
+        if (scrollTop === 0) {
+          status = offsetHeight >= scrollHeight ? '00' : '01';
+        } else if (scrollTop + offsetHeight >= scrollHeight) {
+          status = '10';
+        }
+        /* istanbul ignore next */
+
+
+        if (status !== '11' && this.direction === 'vertical' && !(parseInt(status, 2) & parseInt(direction, 2))) {
+          (0, _event.preventDefault)(event, true);
+        }
+      },
+      renderOverlay: function renderOverlay() {
+        var _this = this;
+
+        if (this.$isServer || !this.value) {
+          return;
+        }
+
+        this.$nextTick(function () {
+          _this.updateZIndex(_this.overlay ? 1 : 0);
+
+          if (_this.overlay) {
+            (0, _overlay.openOverlay)(_this, {
+              zIndex: _context.context.zIndex++,
+              duration: _this.duration,
+              className: _this.overlayClass,
+              customStyle: _this.overlayStyle
+            });
+          } else {
+            (0, _overlay.closeOverlay)(_this);
+          }
+        });
+      },
+      updateZIndex: function updateZIndex(value) {
+        if (value === void 0) {
+          value = 0;
+        }
+
+        this.$el.style.zIndex = ++_context.context.zIndex + value;
+      }
+    }
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/popup/overlay.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/popup/overlay.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.updateOverlay = updateOverlay;
+exports.openOverlay = openOverlay;
+exports.closeOverlay = closeOverlay;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _overlay = _interopRequireDefault(__webpack_require__(/*! ../../overlay */ "./node_modules/vant/lib/overlay/index.js"));
+
+var _context = __webpack_require__(/*! ./context */ "./node_modules/vant/lib/mixins/popup/context.js");
+
+var _functional = __webpack_require__(/*! ../../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+var defaultConfig = {
+  className: '',
+  customStyle: {}
+};
+var overlay; // close popup when click overlay && closeOnClickOverlay is true
+
+function onClickOverlay() {
+  if (_context.context.top) {
+    var vm = _context.context.top.vm;
+    vm.$emit('click-overlay');
+
+    if (vm.closeOnClickOverlay) {
+      if (vm.onClickOverlay) {
+        vm.onClickOverlay();
+      } else {
+        vm.close();
+      }
+    }
+  }
+}
+
+function mountOverlay() {
+  overlay = (0, _functional.mount)(_overlay.default, {
+    on: {
+      click: onClickOverlay
+    }
+  });
+}
+
+function updateOverlay() {
+  if (!overlay) {
+    mountOverlay();
+  }
+
+  if (_context.context.top) {
+    var _context$top = _context.context.top,
+        vm = _context$top.vm,
+        config = _context$top.config;
+    var el = vm.$el;
+
+    if (el && el.parentNode) {
+      el.parentNode.insertBefore(overlay.$el, el);
+    } else {
+      document.body.appendChild(overlay.$el);
+    }
+
+    (0, _extends2.default)(overlay, defaultConfig, config, {
+      show: true
+    });
+  } else {
+    overlay.show = false;
+  }
+}
+
+function openOverlay(vm, config) {
+  if (!_context.context.stack.some(function (item) {
+    return item.vm === vm;
+  })) {
+    _context.context.stack.push({
+      vm: vm,
+      config: config
+    });
+
+    updateOverlay();
+  }
+}
+
+function closeOverlay(vm) {
+  var stack = _context.context.stack;
+
+  if (stack.length) {
+    if (_context.context.top.vm === vm) {
+      stack.pop();
+      updateOverlay();
+    } else {
+      _context.context.stack = stack.filter(function (item) {
+        return item.vm !== vm;
+      });
+    }
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/portal.js":
+/*!************************************************!*\
+  !*** ./node_modules/vant/lib/mixins/portal.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.PortalMixin = PortalMixin;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+function getElement(selector) {
+  if (typeof selector === 'string') {
+    return document.querySelector(selector);
+  }
+
+  return selector();
+}
+
+function PortalMixin(_ref) {
+  var ref = _ref.ref,
+      afterPortal = _ref.afterPortal;
+  return _vue.default.extend({
+    props: {
+      getContainer: [String, Function]
+    },
+    watch: {
+      getContainer: 'portal'
+    },
+    mounted: function mounted() {
+      if (this.getContainer) {
+        this.portal();
+      }
+    },
+    methods: {
+      portal: function portal() {
+        var getContainer = this.getContainer;
+        var el = ref ? this.$refs[ref] : this.$el;
+        var container;
+
+        if (getContainer) {
+          container = getElement(getContainer);
+        } else if (this.$parent) {
+          container = this.$parent.$el;
+        }
+
+        if (container && container !== el.parentNode) {
+          container.appendChild(el);
+        }
+
+        if (afterPortal) {
+          afterPortal.call(this);
+        }
+      }
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/slots.js":
+/*!***********************************************!*\
+  !*** ./node_modules/vant/lib/mixins/slots.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.SlotsMixin = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+/**
+ * Use scopedSlots in Vue 2.6+
+ * downgrade to slots in lower version
+ */
+var SlotsMixin = _vue.default.extend({
+  methods: {
+    slots: function slots(name, props) {
+      if (name === void 0) {
+        name = 'default';
+      }
+
+      var $slots = this.$slots,
+          $scopedSlots = this.$scopedSlots;
+      var scopedSlot = $scopedSlots[name];
+
+      if (scopedSlot) {
+        return scopedSlot(props);
+      }
+
+      return $slots[name];
+    }
+  }
+});
+
+exports.SlotsMixin = SlotsMixin;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/mixins/touch.js":
+/*!***********************************************!*\
+  !*** ./node_modules/vant/lib/mixins/touch.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.TouchMixin = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _event = __webpack_require__(/*! ../utils/dom/event */ "./node_modules/vant/lib/utils/dom/event.js");
+
+var MIN_DISTANCE = 10;
+
+function getDirection(x, y) {
+  if (x > y && x > MIN_DISTANCE) {
+    return 'horizontal';
+  }
+
+  if (y > x && y > MIN_DISTANCE) {
+    return 'vertical';
+  }
+
+  return '';
+}
+
+var TouchMixin = _vue.default.extend({
+  data: function data() {
+    return {
+      direction: ''
+    };
+  },
+  methods: {
+    touchStart: function touchStart(event) {
+      this.resetTouchStatus();
+      this.startX = event.touches[0].clientX;
+      this.startY = event.touches[0].clientY;
+    },
+    touchMove: function touchMove(event) {
+      var touch = event.touches[0];
+      this.deltaX = touch.clientX - this.startX;
+      this.deltaY = touch.clientY - this.startY;
+      this.offsetX = Math.abs(this.deltaX);
+      this.offsetY = Math.abs(this.deltaY);
+      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
+    },
+    resetTouchStatus: function resetTouchStatus() {
+      this.direction = '';
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
+    },
+    // avoid Vue 2.6 event bubble issues by manually binding events
+    // https://github.com/youzan/vant/issues/3015
+    bindTouchEvent: function bindTouchEvent(el) {
+      var _ref = this,
+          onTouchStart = _ref.onTouchStart,
+          onTouchMove = _ref.onTouchMove,
+          onTouchEnd = _ref.onTouchEnd;
+
+      (0, _event.on)(el, 'touchstart', onTouchStart);
+      (0, _event.on)(el, 'touchmove', onTouchMove);
+
+      if (onTouchEnd) {
+        (0, _event.on)(el, 'touchend', onTouchEnd);
+        (0, _event.on)(el, 'touchcancel', onTouchEnd);
+      }
+    }
+  }
+});
+
+exports.TouchMixin = TouchMixin;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/notify/Notify.js":
+/*!************************************************!*\
+  !*** ./node_modules/vant/lib/notify/Notify.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _babelHelperVueJsxMergeProps = _interopRequireDefault(__webpack_require__(/*! @vue/babel-helper-vue-jsx-merge-props */ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js"));
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _functional = __webpack_require__(/*! ../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+var _popup = __webpack_require__(/*! ../mixins/popup */ "./node_modules/vant/lib/mixins/popup/index.js");
+
+var _popup2 = _interopRequireDefault(__webpack_require__(/*! ../popup */ "./node_modules/vant/lib/popup/index.js"));
+
+// Utils
+// Mixins
+// Components
+var _createNamespace = (0, _utils.createNamespace)('notify'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+function Notify(h, props, slots, ctx) {
+  var style = {
+    color: props.color,
+    background: props.background
+  };
+  return h(_popup2.default, (0, _babelHelperVueJsxMergeProps.default)([{
+    "attrs": {
+      "value": props.value,
+      "position": "top",
+      "overlay": false,
+      "duration": 0.2,
+      "lockScroll": false
+    },
+    "style": style,
+    "class": [bem([props.type]), props.className]
+  }, (0, _functional.inherit)(ctx, true)]), [props.message]);
+}
+
+Notify.props = (0, _extends2.default)({}, _popup.popupMixinProps, {
+  color: String,
+  message: [Number, String],
+  duration: [Number, String],
+  className: null,
+  background: String,
+  getContainer: [String, Function],
+  type: {
+    type: String,
+    default: 'danger'
+  }
+});
+
+var _default = createComponent(Notify);
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/notify/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/vant/lib/notify/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _Notify = _interopRequireDefault(__webpack_require__(/*! ./Notify */ "./node_modules/vant/lib/notify/Notify.js"));
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _functional = __webpack_require__(/*! ../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+var timer;
+var instance;
+
+function parseOptions(message) {
+  return (0, _utils.isObject)(message) ? message : {
+    message: message
+  };
+}
+
+function Notify(options) {
+  /* istanbul ignore if */
+  if (_utils.isServer) {
+    return;
+  }
+
+  if (!instance) {
+    instance = (0, _functional.mount)(_Notify.default, {
+      on: {
+        click: function click(event) {
+          if (instance.onClick) {
+            instance.onClick(event);
+          }
+        },
+        close: function close() {
+          if (instance.onClose) {
+            instance.onClose();
+          }
+        },
+        opened: function opened() {
+          if (instance.onOpened) {
+            instance.onOpened();
+          }
+        }
+      }
+    });
+  }
+
+  options = (0, _extends2.default)({}, Notify.currentOptions, {}, parseOptions(options));
+  (0, _extends2.default)(instance, options);
+  clearTimeout(timer);
+
+  if (options.duration && options.duration > 0) {
+    timer = setTimeout(Notify.clear, options.duration);
+  }
+
+  return instance;
+}
+
+function defaultOptions() {
+  return {
+    type: 'danger',
+    value: true,
+    message: '',
+    color: undefined,
+    background: undefined,
+    duration: 3000,
+    className: '',
+    onClose: null,
+    onClick: null,
+    onOpened: null
+  };
+}
+
+Notify.clear = function () {
+  if (instance) {
+    instance.value = false;
+  }
+};
+
+Notify.currentOptions = defaultOptions();
+
+Notify.setDefaultOptions = function (options) {
+  (0, _extends2.default)(Notify.currentOptions, options);
+};
+
+Notify.resetDefaultOptions = function () {
+  Notify.currentOptions = defaultOptions();
+};
+
+Notify.install = function () {
+  _vue.default.use(_Notify.default);
+};
+
+_vue.default.prototype.$notify = Notify;
+var _default = Notify;
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/overlay/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/vant/lib/overlay/index.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _babelHelperVueJsxMergeProps = _interopRequireDefault(__webpack_require__(/*! @vue/babel-helper-vue-jsx-merge-props */ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js"));
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _functional = __webpack_require__(/*! ../utils/functional */ "./node_modules/vant/lib/utils/functional.js");
+
+var _event = __webpack_require__(/*! ../utils/dom/event */ "./node_modules/vant/lib/utils/dom/event.js");
+
+// Utils
+var _createNamespace = (0, _utils.createNamespace)('overlay'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+function preventTouchMove(event) {
+  (0, _event.preventDefault)(event, true);
+}
+
+function Overlay(h, props, slots, ctx) {
+  var style = (0, _extends2.default)({
+    zIndex: props.zIndex
+  }, props.customStyle);
+
+  if ((0, _utils.isDef)(props.duration)) {
+    style.animationDuration = props.duration + "s";
+  }
+
+  return h("transition", {
+    "attrs": {
+      "name": "van-fade"
+    }
+  }, [h("div", (0, _babelHelperVueJsxMergeProps.default)([{
+    "directives": [{
+      name: "show",
+      value: props.show
+    }],
+    "style": style,
+    "class": [bem(), props.className],
+    "on": {
+      "touchmove": preventTouchMove
+    }
+  }, (0, _functional.inherit)(ctx, true)]), [slots.default && slots.default()])]);
+}
+
+Overlay.props = {
+  show: Boolean,
+  zIndex: [Number, String],
+  duration: [Number, String],
+  className: null,
+  customStyle: Object
+};
+
+var _default = createComponent(Overlay);
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/popup/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/vant/lib/popup/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _utils = __webpack_require__(/*! ../utils */ "./node_modules/vant/lib/utils/index.js");
+
+var _popup = __webpack_require__(/*! ../mixins/popup */ "./node_modules/vant/lib/mixins/popup/index.js");
+
+var _icon = _interopRequireDefault(__webpack_require__(/*! ../icon */ "./node_modules/vant/lib/icon/index.js"));
+
+var _createNamespace = (0, _utils.createNamespace)('popup'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+var _default = createComponent({
+  mixins: [(0, _popup.PopupMixin)()],
+  props: {
+    round: Boolean,
+    duration: [Number, String],
+    closeable: Boolean,
+    transition: String,
+    safeAreaInsetBottom: Boolean,
+    closeIcon: {
+      type: String,
+      default: 'cross'
+    },
+    closeIconPosition: {
+      type: String,
+      default: 'top-right'
+    },
+    position: {
+      type: String,
+      default: 'center'
+    },
+    overlay: {
+      type: Boolean,
+      default: true
+    },
+    closeOnClickOverlay: {
+      type: Boolean,
+      default: true
+    }
+  },
+  beforeCreate: function beforeCreate() {
+    var _this = this;
+
+    var createEmitter = function createEmitter(eventName) {
+      return function (event) {
+        return _this.$emit(eventName, event);
+      };
+    };
+
+    this.onClick = createEmitter('click');
+    this.onOpened = createEmitter('opened');
+    this.onClosed = createEmitter('closed');
+  },
+  render: function render() {
+    var _bem;
+
+    var h = arguments[0];
+
+    if (!this.shouldRender) {
+      return;
+    }
+
+    var round = this.round,
+        position = this.position,
+        duration = this.duration;
+    var isCenter = position === 'center';
+    var transitionName = this.transition || (isCenter ? 'van-fade' : "van-popup-slide-" + position);
+    var style = {};
+
+    if ((0, _utils.isDef)(duration)) {
+      var key = isCenter ? 'animationDuration' : 'transitionDuration';
+      style[key] = duration + "s";
+    }
+
+    return h("transition", {
+      "attrs": {
+        "name": transitionName
+      },
+      "on": {
+        "afterEnter": this.onOpened,
+        "afterLeave": this.onClosed
+      }
+    }, [h("div", {
+      "directives": [{
+        name: "show",
+        value: this.value
+      }],
+      "style": style,
+      "class": bem((_bem = {
+        round: round
+      }, _bem[position] = position, _bem['safe-area-inset-bottom'] = this.safeAreaInsetBottom, _bem)),
+      "on": {
+        "click": this.onClick
+      }
+    }, [this.slots(), this.closeable && h(_icon.default, {
+      "attrs": {
+        "role": "button",
+        "tabindex": "0",
+        "name": this.closeIcon
+      },
+      "class": bem('close-icon', this.closeIconPosition),
+      "on": {
+        "click": this.close
+      }
+    })])]);
+  }
+});
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/create/bem.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vant/lib/utils/create/bem.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.createBEM = createBEM;
+
+/**
+ * bem helper
+ * b() // 'button'
+ * b('text') // 'button__text'
+ * b({ disabled }) // 'button button--disabled'
+ * b('text', { disabled }) // 'button__text button__text--disabled'
+ * b(['disabled', 'primary']) // 'button button--disabled button--primary'
+ */
+var ELEMENT = '__';
+var MODS = '--';
+
+function join(name, el, symbol) {
+  return el ? name + symbol + el : name;
+}
+
+function prefix(name, mods) {
+  if (typeof mods === 'string') {
+    return join(name, mods, MODS);
+  }
+
+  if (Array.isArray(mods)) {
+    return mods.map(function (item) {
+      return prefix(name, item);
+    });
+  }
+
+  var ret = {};
+
+  if (mods) {
+    Object.keys(mods).forEach(function (key) {
+      ret[name + MODS + key] = mods[key];
+    });
+  }
+
+  return ret;
+}
+
+function createBEM(name) {
+  return function (el, mods) {
+    if (el && typeof el !== 'string') {
+      mods = el;
+      el = '';
+    }
+
+    el = join(name, el, ELEMENT);
+    return mods ? [el, prefix(el, mods)] : el;
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/create/component.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/vant/lib/utils/create/component.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.unifySlots = unifySlots;
+exports.createComponent = createComponent;
+
+__webpack_require__(/*! ../../locale */ "./node_modules/vant/lib/locale/index.js");
+
+var _ = __webpack_require__(/*! .. */ "./node_modules/vant/lib/utils/index.js");
+
+var _string = __webpack_require__(/*! ../format/string */ "./node_modules/vant/lib/utils/format/string.js");
+
+var _slots = __webpack_require__(/*! ../../mixins/slots */ "./node_modules/vant/lib/mixins/slots.js");
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+/**
+ * Create a basic component with common options
+ */
+function install(Vue) {
+  var name = this.name;
+  Vue.component(name, this);
+  Vue.component((0, _string.camelize)("-" + name), this);
+} // unify slots & scopedSlots
+
+
+function unifySlots(context) {
+  // use data.scopedSlots in lower Vue version
+  var scopedSlots = context.scopedSlots || context.data.scopedSlots || {};
+  var slots = context.slots();
+  Object.keys(slots).forEach(function (key) {
+    if (!scopedSlots[key]) {
+      scopedSlots[key] = function () {
+        return slots[key];
+      };
+    }
+  });
+  return scopedSlots;
+} // should be removed after Vue 3
+
+
+function transformFunctionComponent(pure) {
+  return {
+    functional: true,
+    props: pure.props,
+    model: pure.model,
+    render: function render(h, context) {
+      return pure(h, context.props, unifySlots(context), context);
+    }
+  };
+}
+
+function createComponent(name) {
+  return function (sfc) {
+    if ((0, _.isFunction)(sfc)) {
+      sfc = transformFunctionComponent(sfc);
+    }
+
+    if (!sfc.functional) {
+      sfc.mixins = sfc.mixins || [];
+      sfc.mixins.push(_slots.SlotsMixin);
+    }
+
+    sfc.name = name;
+    sfc.install = install;
+    return sfc;
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/create/i18n.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vant/lib/utils/create/i18n.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.createI18N = createI18N;
+
+var _ = __webpack_require__(/*! .. */ "./node_modules/vant/lib/utils/index.js");
+
+var _string = __webpack_require__(/*! ../format/string */ "./node_modules/vant/lib/utils/format/string.js");
+
+var _locale = _interopRequireDefault(__webpack_require__(/*! ../../locale */ "./node_modules/vant/lib/locale/index.js"));
+
+function createI18N(name) {
+  var prefix = (0, _string.camelize)(name) + '.';
+  return function (path) {
+    var messages = _locale.default.messages();
+
+    var message = (0, _.get)(messages, prefix + path) || (0, _.get)(messages, path);
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return (0, _.isFunction)(message) ? message.apply(void 0, args) : message;
+  };
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/create/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/vant/lib/utils/create/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.createNamespace = createNamespace;
+
+var _bem = __webpack_require__(/*! ./bem */ "./node_modules/vant/lib/utils/create/bem.js");
+
+var _component = __webpack_require__(/*! ./component */ "./node_modules/vant/lib/utils/create/component.js");
+
+var _i18n = __webpack_require__(/*! ./i18n */ "./node_modules/vant/lib/utils/create/i18n.js");
+
+function createNamespace(name) {
+  name = 'van-' + name;
+  return [(0, _component.createComponent)(name), (0, _bem.createBEM)(name), (0, _i18n.createI18N)(name)];
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/deep-assign.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vant/lib/utils/deep-assign.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.deepAssign = deepAssign;
+
+var _ = __webpack_require__(/*! . */ "./node_modules/vant/lib/utils/index.js");
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function assignKey(to, from, key) {
+  var val = from[key];
+
+  if (!(0, _.isDef)(val)) {
+    return;
+  }
+
+  if (!hasOwnProperty.call(to, key) || !(0, _.isObject)(val)) {
+    to[key] = val;
+  } else {
+    // eslint-disable-next-line no-use-before-define
+    to[key] = deepAssign(Object(to[key]), from[key]);
+  }
+}
+
+function deepAssign(to, from) {
+  Object.keys(from).forEach(function (key) {
+    assignKey(to, from, key);
+  });
+  return to;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/dom/event.js":
+/*!**************************************************!*\
+  !*** ./node_modules/vant/lib/utils/dom/event.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.on = on;
+exports.off = off;
+exports.stopPropagation = stopPropagation;
+exports.preventDefault = preventDefault;
+exports.supportsPassive = void 0;
+
+var _ = __webpack_require__(/*! .. */ "./node_modules/vant/lib/utils/index.js");
+
+// eslint-disable-next-line import/no-mutable-exports
+var supportsPassive = false;
+exports.supportsPassive = supportsPassive;
+
+if (!_.isServer) {
+  try {
+    var opts = {};
+    Object.defineProperty(opts, 'passive', {
+      // eslint-disable-next-line getter-return
+      get: function get() {
+        /* istanbul ignore next */
+        exports.supportsPassive = supportsPassive = true;
+      }
+    });
+    window.addEventListener('test-passive', null, opts); // eslint-disable-next-line no-empty
+  } catch (e) {}
+}
+
+function on(target, event, handler, passive) {
+  if (passive === void 0) {
+    passive = false;
+  }
+
+  if (!_.isServer) {
+    target.addEventListener(event, handler, supportsPassive ? {
+      capture: false,
+      passive: passive
+    } : false);
+  }
+}
+
+function off(target, event, handler) {
+  if (!_.isServer) {
+    target.removeEventListener(event, handler);
+  }
+}
+
+function stopPropagation(event) {
+  event.stopPropagation();
+}
+
+function preventDefault(event, isStopPropagation) {
+  /* istanbul ignore else */
+  if (typeof event.cancelable !== 'boolean' || event.cancelable) {
+    event.preventDefault();
+  }
+
+  if (isStopPropagation) {
+    stopPropagation(event);
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/dom/node.js":
+/*!*************************************************!*\
+  !*** ./node_modules/vant/lib/utils/dom/node.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.removeNode = removeNode;
+
+function removeNode(el) {
+  var parent = el.parentNode;
+
+  if (parent) {
+    parent.removeChild(el);
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/dom/scroll.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vant/lib/utils/dom/scroll.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.getScroller = getScroller;
+exports.getScrollTop = getScrollTop;
+exports.setScrollTop = setScrollTop;
+exports.getRootScrollTop = getRootScrollTop;
+exports.setRootScrollTop = setRootScrollTop;
+exports.getElementTop = getElementTop;
+exports.getVisibleHeight = getVisibleHeight;
+exports.getVisibleTop = getVisibleTop;
+
+function isWindow(val) {
+  return val === window;
+} // get nearest scroll element
+// http://w3help.org/zh-cn/causes/SD9013
+// http://stackoverflow.com/questions/17016740/onscroll-function-is-not-working-for-chrome
+
+
+var overflowScrollReg = /scroll|auto/i;
+
+function getScroller(el, root) {
+  if (root === void 0) {
+    root = window;
+  }
+
+  var node = el;
+
+  while (node && node.tagName !== 'HTML' && node.nodeType === 1 && node !== root) {
+    var _window$getComputedSt = window.getComputedStyle(node),
+        overflowY = _window$getComputedSt.overflowY;
+
+    if (overflowScrollReg.test(overflowY)) {
+      if (node.tagName !== 'BODY') {
+        return node;
+      } // see: https://github.com/youzan/vant/issues/3823
+
+
+      var _window$getComputedSt2 = window.getComputedStyle(node.parentNode),
+          htmlOverflowY = _window$getComputedSt2.overflowY;
+
+      if (overflowScrollReg.test(htmlOverflowY)) {
+        return node;
+      }
+    }
+
+    node = node.parentNode;
+  }
+
+  return root;
+}
+
+function getScrollTop(el) {
+  return 'scrollTop' in el ? el.scrollTop : el.pageYOffset;
+}
+
+function setScrollTop(el, value) {
+  if ('scrollTop' in el) {
+    el.scrollTop = value;
+  } else {
+    el.scrollTo(el.scrollX, value);
+  }
+}
+
+function getRootScrollTop() {
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+}
+
+function setRootScrollTop(value) {
+  setScrollTop(window, value);
+  setScrollTop(document.body, value);
+} // get distance from element top to page top
+
+
+function getElementTop(el) {
+  if (isWindow(el)) {
+    return 0;
+  }
+
+  return el.getBoundingClientRect().top + getRootScrollTop();
+}
+
+function getVisibleHeight(el) {
+  if (isWindow(el)) {
+    return el.innerHeight;
+  }
+
+  return el.getBoundingClientRect().height;
+}
+
+function getVisibleTop(el) {
+  if (isWindow(el)) {
+    return 0;
+  }
+
+  return el.getBoundingClientRect().top;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/format/string.js":
+/*!******************************************************!*\
+  !*** ./node_modules/vant/lib/utils/format/string.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.camelize = camelize;
+exports.padZero = padZero;
+var camelizeRE = /-(\w)/g;
+
+function camelize(str) {
+  return str.replace(camelizeRE, function (_, c) {
+    return c.toUpperCase();
+  });
+}
+
+function padZero(num, targetLength) {
+  if (targetLength === void 0) {
+    targetLength = 2;
+  }
+
+  var str = num + '';
+
+  while (str.length < targetLength) {
+    str = '0' + str;
+  }
+
+  return str;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/format/unit.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vant/lib/utils/format/unit.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.addUnit = addUnit;
+
+var _ = __webpack_require__(/*! .. */ "./node_modules/vant/lib/utils/index.js");
+
+var _number = __webpack_require__(/*! ../validate/number */ "./node_modules/vant/lib/utils/validate/number.js");
+
+function addUnit(value) {
+  if (!(0, _.isDef)(value)) {
+    return undefined;
+  }
+
+  value = String(value);
+  return (0, _number.isNumeric)(value) ? value + "px" : value;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/functional.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vant/lib/utils/functional.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.inherit = inherit;
+exports.emit = emit;
+exports.mount = mount;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var inheritKey = ['ref', 'style', 'class', 'attrs', 'nativeOn', 'directives', 'staticClass', 'staticStyle'];
+var mapInheritKey = {
+  nativeOn: 'on'
+}; // inherit partial context, map nativeOn to on
+
+function inherit(context, inheritListeners) {
+  var result = inheritKey.reduce(function (obj, key) {
+    if (context.data[key]) {
+      obj[mapInheritKey[key] || key] = context.data[key];
+    }
+
+    return obj;
+  }, {});
+
+  if (inheritListeners) {
+    result.on = result.on || {};
+    (0, _extends2.default)(result.on, context.data.on);
+  }
+
+  return result;
+} // emit event
+
+
+function emit(context, eventName) {
+  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  var listeners = context.listeners[eventName];
+
+  if (listeners) {
+    if (Array.isArray(listeners)) {
+      listeners.forEach(function (listener) {
+        listener.apply(void 0, args);
+      });
+    } else {
+      listeners.apply(void 0, args);
+    }
+  }
+} // mount functional component
+
+
+function mount(Component, data) {
+  var instance = new _vue.default({
+    el: document.createElement('div'),
+    props: Component.props,
+    render: function render(h) {
+      return h(Component, (0, _extends2.default)({
+        props: this.$props
+      }, data));
+    }
+  });
+  document.body.appendChild(instance.$el);
+  return instance;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/vant/lib/utils/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.noop = noop;
+exports.isDef = isDef;
+exports.isFunction = isFunction;
+exports.isObject = isObject;
+exports.get = get;
+exports.isServer = exports.addUnit = exports.createNamespace = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _create = __webpack_require__(/*! ./create */ "./node_modules/vant/lib/utils/create/index.js");
+
+exports.createNamespace = _create.createNamespace;
+
+var _unit = __webpack_require__(/*! ./format/unit */ "./node_modules/vant/lib/utils/format/unit.js");
+
+exports.addUnit = _unit.addUnit;
+var isServer = _vue.default.prototype.$isServer;
+exports.isServer = isServer;
+
+function noop() {}
+
+function isDef(val) {
+  return val !== undefined && val !== null;
+}
+
+function isFunction(val) {
+  return typeof val === 'function';
+}
+
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+function get(object, path) {
+  var keys = path.split('.');
+  var result = object;
+  keys.forEach(function (key) {
+    result = isDef(result[key]) ? result[key] : '';
+  });
+  return result;
+}
+
+/***/ }),
+
+/***/ "./node_modules/vant/lib/utils/validate/number.js":
+/*!********************************************************!*\
+  !*** ./node_modules/vant/lib/utils/validate/number.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.isNumeric = isNumeric;
+exports.isNaN = isNaN;
+
+function isNumeric(val) {
+  return /^\d+(\.\d+)?$/.test(val);
+}
+
+function isNaN(val) {
+  if (Number.isNaN) {
+    return Number.isNaN(val);
+  } // eslint-disable-next-line no-self-compare
+
+
+  return val !== val;
+}
 
 /***/ }),
 
@@ -22531,14 +24658,15 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "app" }, [
-    _vm.loading
+    _vm.status === 0
       ? _c(
           "div",
           { staticClass: "loading" },
-          [_c("van-loading", { attrs: { size: "36", color: "#1989fa" } })],
+          [_c("van-loading", { attrs: { size: "36" } })],
           1
         )
-      : _c(
+      : _vm.status === 1
+      ? _c(
           "div",
           { staticClass: "preview-main" },
           [
@@ -22549,61 +24677,59 @@ var render = function() {
                 "div",
                 { key: index, staticClass: "preview-item" },
                 [
-                  items.type !== "textarea"
+                  items.type === "single-choose"
                     ? _c(
-                        "van-checkbox-group",
+                        "van-radio-group",
                         {
-                          attrs: { max: 2 },
                           model: {
-                            value: _vm.answer,
+                            value: _vm.answer.content[index].options[0],
                             callback: function($$v) {
-                              _vm.answer = $$v
+                              _vm.$set(
+                                _vm.answer.content[index].options,
+                                0,
+                                $$v
+                              )
                             },
-                            expression: "answer"
+                            expression: "answer.content[index].options[0]"
                           }
                         },
                         [
                           _c("div", { staticClass: "preview-title" }, [
+                            _vm._v("\n            " + _vm._s(index + 1) + "、"),
+                            items.required
+                              ? _c("span", { staticClass: "require" }, [
+                                  _vm._v("*")
+                                ])
+                              : _vm._e(),
                             _vm._v(
-                              _vm._s(index + 1) +
-                                "、" +
-                                _vm._s(items.title) +
+                              _vm._s(items.title) +
                                 "(" +
                                 _vm._s(_vm.questionType[items.type]) +
-                                ")"
+                                ")\n"
                             )
                           ]),
                           _vm._v(" "),
-                          _vm._l(items.select, function(item, idx) {
+                          _vm._l(items.options, function(item, idx) {
                             return _c(
                               "van-cell-group",
-                              {
-                                key: idx,
-                                staticClass: "choose",
-                                attrs: { clickable: "" }
-                              },
+                              { key: idx, staticClass: "choose" },
                               [
                                 _c(
                                   "van-cell",
                                   {
                                     attrs: {
-                                      title:
-                                        String.fromCharCode(
-                                          64 + parseInt(idx + 1)
-                                        ) +
-                                        "、" +
-                                        item.value,
-                                      clickable: ""
+                                      clickable: "",
+                                      title: _vm._f("title")(item, idx)
                                     },
                                     on: {
                                       click: function($event) {
-                                        _vm.radio = "2"
+                                        return _vm.saveOptions(item, index)
                                       }
                                     }
                                   },
                                   [
                                     _c("van-radio", {
-                                      attrs: { slot: "right-icon", name: "2" },
+                                      attrs: { slot: "right-icon", name: item },
                                       slot: "right-icon"
                                     })
                                   ],
@@ -22616,27 +24742,107 @@ var render = function() {
                         ],
                         2
                       )
-                    : _c(
+                    : items.type === "textarea"
+                    ? _c(
                         "div",
                         { staticClass: "textarea" },
                         [
                           _c("div", { staticClass: "preview-title" }, [
-                            _vm._v(
-                              _vm._s(index + 1) + "、" + _vm._s(items.title)
-                            )
+                            _vm._v(_vm._s(index + 1) + "、"),
+                            items.required
+                              ? _c("span", { staticClass: "require" }, [
+                                  _vm._v("*")
+                                ])
+                              : _vm._e(),
+                            _vm._v(_vm._s(items.title))
                           ]),
                           _vm._v(" "),
                           _c("van-field", {
                             attrs: {
-                              rows: 5,
-                              autosize: "",
-                              label: "答案",
                               type: "textarea",
-                              placeholder: "请输入答案"
+                              placeholder: "请输入内容",
+                              rows: items.row,
+                              autosize: ""
+                            },
+                            model: {
+                              value: _vm.answer.content[index].text,
+                              callback: function($$v) {
+                                _vm.$set(_vm.answer.content[index], "text", $$v)
+                              },
+                              expression: "answer.content[index].text"
                             }
                           })
                         ],
                         1
+                      )
+                    : _c(
+                        "van-checkbox-group",
+                        {
+                          model: {
+                            value: _vm.answer.content[index].options,
+                            callback: function($$v) {
+                              _vm.$set(
+                                _vm.answer.content[index],
+                                "options",
+                                $$v
+                              )
+                            },
+                            expression: "answer.content[index].options"
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "preview-title" }, [
+                            _vm._v(_vm._s(index + 1) + "、"),
+                            items.required
+                              ? _c("span", { staticClass: "require" }, [
+                                  _vm._v("*")
+                                ])
+                              : _vm._e(),
+                            _vm._v(
+                              _vm._s(items.title) +
+                                "(" +
+                                _vm._s(_vm.questionType[items.type]) +
+                                ")"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(items.options, function(item, idx) {
+                            return _c(
+                              "van-cell-group",
+                              { key: idx },
+                              [
+                                _c(
+                                  "van-cell",
+                                  {
+                                    attrs: {
+                                      clickable: "",
+                                      title: _vm._f("title")(item, idx)
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.saveMulOptions(
+                                          "ref" + items.id,
+                                          idx
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("van-checkbox", {
+                                      ref: "ref" + items.id,
+                                      refInFor: true,
+                                      attrs: { slot: "right-icon", name: item },
+                                      slot: "right-icon"
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          })
+                        ],
+                        2
                       )
                 ],
                 1
@@ -22649,7 +24855,15 @@ var render = function() {
               [
                 _c(
                   "van-button",
-                  { attrs: { type: "primary", size: "large" } },
+                  {
+                    attrs: {
+                      "loading-text": "提交中...",
+                      loading: _vm.submitting,
+                      type: "primary",
+                      size: "large"
+                    },
+                    on: { click: _vm.submitAnswer }
+                  },
                   [_vm._v("提交")]
                 )
               ],
@@ -22660,6 +24874,9 @@ var render = function() {
           ],
           2
         )
+      : _c("div", { staticClass: "finish" }, [
+          _vm._v("\n      问卷到此结束，感谢你的参与！\n    ")
+        ])
   ])
 }
 var staticRenderFns = [
@@ -34867,6 +37084,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["CellGroup"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["Field"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["Loading"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["CheckboxGroup"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["Notify"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vant__WEBPACK_IMPORTED_MODULE_1__["Icon"]);
 
 /***/ }),
 

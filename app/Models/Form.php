@@ -25,15 +25,15 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Form whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Form whereUserId($value)
  * @mixin \Eloquent
+ * @property string $question_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Form whereQuestionId($value)
  */
 class Form extends Model
 {
-    protected $fillable = ['user_id', 'title', 'content', 'status'];
+    protected $guarded = [];
 
-//    protected $visible = ['id'];
-
-    public function saveForm($data)
+    public function getForm($question_id)
     {
-
+        return $this->where(['question_id' => $question_id])->first();
     }
 }

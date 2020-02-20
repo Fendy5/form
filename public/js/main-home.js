@@ -85153,7 +85153,7 @@ var render = function() {
                 "el-col",
                 { staticClass: "logo", attrs: { offset: 2, span: 4 } },
                 [
-                  _c("a", { attrs: { href: "/home" } }, [
+                  _c("a", { attrs: { href: "/" } }, [
                     _c("img", {
                       attrs: {
                         src: __webpack_require__(/*! ../asset/images/logo.png */ "./resources/js/asset/images/logo.png"),
@@ -85212,16 +85212,18 @@ var render = function() {
                             _vm._v("我的问卷")
                           ]),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "2-1" } }, [
-                            _vm._v("选项1")
+                          _c(
+                            "el-menu-item",
+                            { attrs: { index: "not_release" } },
+                            [_vm._v("未投放")]
+                          ),
+                          _vm._v(" "),
+                          _c("el-menu-item", { attrs: { index: "released" } }, [
+                            _vm._v("投放中")
                           ]),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "2-2" } }, [
-                            _vm._v("选项2")
-                          ]),
-                          _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "2-3" } }, [
-                            _vm._v("选项3")
+                          _c("el-menu-item", { attrs: { index: "recovery" } }, [
+                            _vm._v("已回收")
                           ])
                         ],
                         2
@@ -100734,6 +100736,18 @@ var Vote = function Vote() {
   return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/create/Vote */ "./resources/js/views/create/Vote.vue"));
 };
 
+var NotRelease = function NotRelease() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/NotRelease */ "./resources/js/views/mine/NotRelease.vue"));
+};
+
+var Recovery = function Recovery() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/Recovery */ "./resources/js/views/mine/Recovery.vue"));
+};
+
+var Released = function Released() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/Released */ "./resources/js/views/mine/Released.vue"));
+};
+
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -100752,6 +100766,15 @@ var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }, {
       path: '/vote',
       component: Vote
+    }, {
+      path: '/not_release',
+      component: NotRelease
+    }, {
+      path: '/released',
+      component: Released
+    }, {
+      path: '/recovery',
+      component: Recovery
     }]
   }]
 });

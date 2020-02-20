@@ -3,7 +3,7 @@
         <el-header>
             <el-row class="header" type="flex" justify="space-between" :gutter="20">
                 <el-col :offset="2" class="logo" :span="4">
-                    <a href="/home"><img src="../asset/images/logo.png" alt=""></a>
+                    <a href="/"><img src="../asset/images/logo.png" alt=""></a>
                     <span>秋霁问卷</span>
                 </el-col>
                 <el-col :span="12">
@@ -17,9 +17,9 @@
                         </el-submenu>
                         <el-submenu index="2">
                             <template slot="title">我的问卷</template>
-                            <el-menu-item index="2-1">选项1</el-menu-item>
-                            <el-menu-item index="2-2">选项2</el-menu-item>
-                            <el-menu-item index="2-3">选项3</el-menu-item>
+                            <el-menu-item index="not_release">未投放</el-menu-item>
+                            <el-menu-item index="released">投放中</el-menu-item>
+                            <el-menu-item index="recovery">已回收</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-col>

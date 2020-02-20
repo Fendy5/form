@@ -1,4 +1,4 @@
-#<img src="public/images/logo.png" alt="logo" style="zoom: 50%;" /> 秋霁问卷
+#<img src="public/images/logo.png" alt="logo" style="zoom: 25%;" /> 秋霁问卷
 
 ##技术栈
 
@@ -25,3 +25,4 @@
 
 ## 部分截图
 
+<img src="screenshot/login.jpeg" alt="login" style="zoom:50%;" />

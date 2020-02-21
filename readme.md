@@ -1,6 +1,6 @@
 #<img src="public/images/logo.png" alt="logo" style="zoom: 25%;" /> 秋霁问卷
 
-##技术栈
+## 技术栈
 
 1. VueJS
 2. Laravel 6
@@ -11,7 +11,7 @@
 
 
 
-##功能
+## 功能
 
 1. 注册登录
 

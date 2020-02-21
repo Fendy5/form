@@ -1,4 +1,4 @@
-#<img src="public/images/logo.png" alt="logo" style="zoom: 25%;" /> 秋霁问卷
+# <img src="public/images/logo.png" alt="logo" style="zoom: 15%;" /> 秋霁问卷
 
 ## 技术栈
 

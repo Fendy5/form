@@ -15,12 +15,7 @@
                             <el-menu-item index="vote">在线投票</el-menu-item>
                             <el-menu-item index="exam">考试检测</el-menu-item>
                         </el-submenu>
-                        <el-submenu index="2">
-                            <template slot="title">我的问卷</template>
-                            <el-menu-item index="not_release">未投放</el-menu-item>
-                            <el-menu-item index="released">投放中</el-menu-item>
-                            <el-menu-item index="recovery">已回收</el-menu-item>
-                        </el-submenu>
+                      <el-menu-item index="my_question">我的问卷</el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="4">

@@ -37,6 +37,9 @@ Route::post('/sign_up', 'Home\LoginController@sign_up');
 Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::get('/', 'IndexController@index');
     Route::post('save_data', 'FormController@saveData');
+    Route::post('get_forms', 'FormController@getMyForm');
+    Route::post('delete_form', 'FormController@deleteForm');
+    Route::post('release', 'FormController@release');
     Route::get('/logout', 'LoginController@logout');
 });
 
@@ -55,8 +58,8 @@ Route::get('/test', function () {
 //    dd(Arr::has($book,'name.English'));
 
     //产生唯一字符串
-    dd(Str::uuid());
-
+//    dd(Str::uuid());
+    dd(getUserId());
 //    $parents = [
 //            ['parent' => ['id' => 1, 'name' => 'James']],
 //            ['parent' => ['id' => 8, 'name' => 'Lisa']],

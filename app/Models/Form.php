@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use function getUserId;
 
 /**
  * App\Models\Form
@@ -32,8 +34,25 @@ class Form extends Model
 {
     protected $guarded = [];
 
+    use SoftDeletes;
+
     public function getForm($question_id)
     {
         return $this->where(['question_id' => $question_id])->first();
+    }
+
+    public function getForms()
+    {
+        return $this->where(['user_id' => getUserId()])->select(['question_id','title','status','created_at'])->get();
+    }
+
+    public function deleteByQuestionId($question_id)
+    {
+        return $this->where('question_id', $question_id)->delete();
+    }
+
+    public function updateStatus($id,$status)
+    {
+        return $this->where('question_id', $id)->update(['status' => $status,]);
     }
 }

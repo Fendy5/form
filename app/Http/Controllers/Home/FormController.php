@@ -23,9 +23,12 @@ class FormController extends Controller
         $form->user_id = session()->get('user')->id;
         $form->content = json_encode(\request('content'));
         $form->status = 0;
-        $form->question_id = str_random(16);
+        $formUrl = str_random(16);
+        $form->question_id = $formUrl;
         $form->save();
-        return "ok!";
+        return [
+            'formUrl' => $formUrl
+        ];
     }
 
     //display form content
@@ -44,6 +47,7 @@ class FormController extends Controller
         $data = [
             'id' => $id,
             'title'   => $form->title,
+            'formStatus'=>$form->status,
             'content' => json_decode($form->content)
         ];
         return $data;
@@ -66,6 +70,54 @@ class FormController extends Controller
                 'msg'=>'提交失败'
             ];
         return $data;
+    }
+
+    public function getMyForm()
+    {
+        $forms = (new Form())->getForms();
+        return [
+            'code' => 1,
+            'msg' => '获取成功！',
+            'forms' => $forms
+        ];
+    }
+
+    public function deleteForm()
+    {
+        $question_id = \request('id');
+        $res = (new Form())->deleteByQuestionId($question_id);
+        if ($res) {
+            $rsp = [
+                'code' => 1,
+                'msg' => '删除成功！',
+            ];
+        } else {
+            $rsp = [
+                'code' => 0,
+                'msg' => '删除失败！',
+            ];
+        }
+        return $rsp;
+    }
+
+    public function release()
+    {
+        $id = \request('id');
+        $form = new Form();
+        $status = $form->getForm($id)->status == '0' ? '1' : '0';
+        $res = $form->updateStatus($id, $status);
+        if ($res) {
+            $rsp = [
+                'code' => 1,
+                'msg' => '操作成功！',
+            ];
+        } else {
+            $rsp = [
+                'code' => 0,
+                'msg' => '操作失败！',
+            ];
+        }
+        return $rsp;
     }
 
 

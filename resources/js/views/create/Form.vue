@@ -19,6 +19,7 @@
                         </el-form-item>
                     </el-card>
                     <div id="content">
+                      <draggable :component-data="getComponentData()" :list="form.content">
                         <div v-for="(items,index) in form.content">
                             <el-card v-if="items.type==='single-choose'">
                                 <el-form-item
@@ -33,6 +34,9 @@
                                     <el-input v-model="item.text">
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                  <el-checkbox v-model="items.required" >必填</el-checkbox>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button @click="addChoose(index)" type="primary">添加选项</el-button>
@@ -53,6 +57,9 @@
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
                                 </el-form-item>
+                              <el-form-item>
+                                <el-checkbox v-model="items.required" >必填</el-checkbox>
+                              </el-form-item>
                                 <el-form-item>
                                     <el-button @click="addChoose(index)" type="primary">添加选项</el-button>
                                     <el-button @click="removeQuestion(items,index)" type="danger">删除题目</el-button>
@@ -72,6 +79,9 @@
                                         <template slot="append"><i @click="removeChoose(item,index)" class="el-icon-delete"></i></template>
                                     </el-input>
                                 </el-form-item>
+                              <el-form-item>
+                                <el-checkbox v-model="items.required" >必填</el-checkbox>
+                              </el-form-item>
                                 <el-form-item>
                                     <el-button @click="addChoose(index)" type="primary">添加选项</el-button>
                                     <el-button @click="removeQuestion(items,index)" type="danger">删除题目</el-button>
@@ -90,11 +100,15 @@
                                     <el-input v-model="form.content[index].row">
                                     </el-input>
                                 </el-form-item>
+                              <el-form-item>
+                                <el-checkbox v-model="items.required" >必填</el-checkbox>
+                              </el-form-item>
                                 <el-form-item>
                                     <el-button @click="removeQuestion(items,index)" type="danger">删除题目</el-button>
                                 </el-form-item>
                             </el-card>
                         </div>
+                      </draggable>
                     </div>
                 </el-form>
             </div>
@@ -103,83 +117,160 @@
             <div class="preview">
                 <div class="preview-main">
                     <h2>{{form.title}}</h2>
-                    <div v-for="(items,index) in form.content" :key="index" class="preview-item">
+                      <div v-for="(items,index) in form.content" :key="index" class="preview-item">
                         <van-radio-group v-if="items.type !== 'textarea'">
-                            <div class="preview-title">{{index+1}}、{{items.title}}</div>
-                            <van-cell-group  v-for="(item,idx) in items.options" :key="idx">
-                                <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.text" clickable @click="radio = '2'">
-                                    <van-radio slot="right-icon" name="2" />
-                                </van-cell>
-                            </van-cell-group>
+                          <div class="preview-title">{{index+1}}、{{items.title}}</div>
+                          <van-cell-group  v-for="(item,idx) in items.options" :key="idx">
+                            <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.text" clickable @click="radio = '2'">
+                              <van-radio slot="right-icon" name="2" />
+                            </van-cell>
+                          </van-cell-group>
                         </van-radio-group>
-
                         <div v-else class="textarea">
-                            <div class="preview-title">{{index+1}}、{{items.title}}</div>
-                            <van-field
-                                :rows="5"
-                                autosize
-                                label="答案"
-                                type="textarea"
-                                placeholder="请输入答案"
-                            />
+                          <div class="preview-title">{{index+1}}、{{items.title}}</div>
+                          <van-field
+                            :rows="5"
+                            autosize
+                            type="textarea"
+                            placeholder="请输入答案"
+                          />
                         </div>
+                      </div>
+                </div>
+                <div style="margin: 20px 0;text-align: center">
+                    <el-button @click="saveDate">设备预览</el-button>
+                    <el-button type="primary">保存并发放</el-button>
+                 </div>
+              <el-dialog :modal-append-to-body="false" title="设备预览" :visible.sync="devicePreview">
+                <div class="device-preview">
+                  <qriously :value="formUrl" :size="150" />
+                  <div class="form-url">
+                    <el-input  id="formUrl" :value="formUrl"></el-input>
+                    <div class="handle-url">
+                      <el-button @click="copyUrl">复 制</el-button>
+                      <el-button @click="openUrl">打 开</el-button>
                     </div>
+                  </div>
                 </div>
-                    <div style="margin: 20px 0;text-align: center">
-                        <el-button @click="saveDate">预览</el-button>
-                        <el-button type="primary">保存并发放</el-button>
-                </div>
+              </el-dialog>
             </div>
         </el-col>
     </el-row>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 export default {
+  components:{
+    draggable
+  },
   data () {
       return {
-          form: {
-              title: '',
-              content: []
-          },
-          rules: {
-              title: [
-                  { required: true, message: '请输入标题', trigger: 'blur' },
-                  { min: 1, max: 32, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-              ],
-              question: [
-                  { required: true, message: '请输入题目', trigger: 'blur' },
-                  { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-              ],
-          }
+        formUrl: 'http://192.168.31.241:8081/s/7yc4t4HDxJ4GxLTI',
+        devicePreview: false,
+        form: {
+            title: '',
+            content: []
+        },
+        rules: {
+            title: [
+                { required: true, message: '请输入标题', trigger: 'blur' },
+                { min: 1, max: 32, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ],
+            question: [
+                { required: true, message: '请输入题目', trigger: 'blur' },
+                { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ],
+        }
       };
   },
-    methods: {
-      formRef () {
-          this.$refs.formRef.resetFields()
-      },
-      simpleChoose() {
-          this.form.content.push({
-              "type": "single-choose",
-              "id": this.createRandomStr(),
-              "title": "",
-              "required": true,
-              "options": [
-                  {
-                      "id": Date.now().toString()+1,
-                      "text": ""
-                  },
-                  {
-                      "id": Date.now().toString()+2,
-                      "text": ""
-                  }
-              ]
-          },);
-      },
-      mulChoose() {
+  methods: {
+    handleChange() {
+      console.log('changed');
+    },
+    inputChanged(value) {
+      this.activeNames = value;
+    },
+    getComponentData() {
+      return {
+        on: {
+          change: this.handleChange,
+          input: this.inputChanged
+        },
+        attrs:{
+          wrap: true
+        },
+        props: {
+          value: this.activeNames
+        }
+      };
+    },
+    copyUrl() {
+      const input = document.getElementById('formUrl');
+      input.select(); // 选中文本
+      if (document.execCommand('copy')) {
+        this.$message.success('复制成功！');
+      }
+    },
+    openUrl() {
+      window.open(this.formUrl);
+    },
+    formRef () {
+        this.$refs.formRef.resetFields()
+    },
+    simpleChoose() {
         this.form.content.push({
+            "type": "single-choose",
+            "id": this.createRandomStr(),
+            "title": "",
+            "required": true,
+            "options": [
+                {
+                    "id": Date.now().toString()+1,
+                    "text": ""
+                },
+                {
+                    "id": Date.now().toString()+2,
+                    "text": ""
+                }
+            ]
+        },);
+    },
+    mulChoose() {
+      this.form.content.push({
+        "id": this.createRandomStr(),
+        "type": "mul-choose",
+        "title": "",
+        "required": true,
+        "options": [
+            {
+                "id": Date.now().toString()+1,
+                "text": ""
+            },
+            {
+                "id": Date.now().toString()+2,
+                "text": ""
+            },
+            {
+                "id": Date.now().toString()+3,
+                "text": ""
+            }
+        ]
+    },);
+    },
+    textarea() {
+        this.form.content.push({
+          "type": "textarea",
+          "required": true,
+          "title": "",
+          "row": "2",
           "id": this.createRandomStr(),
-          "type": "mul-choose",
+        })
+    },
+    randomChoose() {
+        this.form.content.push({
+          "type": "random-choose",
+          "id": this.createRandomStr(),
           "title": "",
           "required": true,
           "options": [
@@ -195,142 +286,128 @@ export default {
                   "id": Date.now().toString()+3,
                   "text": ""
               }
-          ]
-      },);
-      },
-      textarea() {
-          this.form.content.push({
-            "type": "textarea",
-            "title": "",
-            "row": "2",
-            "id": this.createRandomStr(),
-          })
-      },
-      randomChoose() {
-          this.form.content.push({
-            "type": "random-choose",
-            "id": this.createRandomStr(),
-            "title": "",
-            "required": true,
-            "options": [
-                {
-                    "id": Date.now().toString()+1,
-                    "text": ""
-                },
-                {
-                    "id": Date.now().toString()+2,
-                    "text": ""
-                },
-                {
-                    "id": Date.now().toString()+3,
-                    "text": ""
-                }
-              ]
-          },);
-      },
-      addChoose(index) {
-          this.form.content[index].options.push({
-              text: '',
-              id: Date.now().toString()
-          })
-      },
-      removeQuestion(item,index) {
-          let currentIndex = this.form.content.indexOf(item);
-          if (currentIndex !== -1) {
-              this.form.content.splice(currentIndex, 1);
-          }
-      },
-      removeChoose(item,index) {
-          console.log("index:" + index);
-          console.log(item);
-          let currentIndex = this.form.content[index].options.indexOf(item);
-          if (currentIndex !== -1) {
-              this.form.content[index].options.splice(currentIndex, 1);
-          }
-      },
-      async saveDate() {
-          console.log(123);
-          let res = await this.$http.post('save_data', this.form);
-          if (res.status !== 200) return this.$message.error('提交失败');
-          console.log(res);
-      },
-      createRandomStr() {
-        return Math.random().toString(36).slice(-8)
-      }
+            ]
+        },);
+    },
+    addChoose(index) {
+        this.form.content[index].options.push({
+            text: '',
+            id: Date.now().toString()
+        })
+    },
+    removeQuestion(item,index) {
+        let currentIndex = this.form.content.indexOf(item);
+        if (currentIndex !== -1) {
+            this.form.content.splice(currentIndex, 1);
+        }
+    },
+    removeChoose(item,index) {
+        console.log("index:" + index);
+        console.log(item);
+        let currentIndex = this.form.content[index].options.indexOf(item);
+        if (currentIndex !== -1) {
+            this.form.content[index].options.splice(currentIndex, 1);
+        }
+    },
+    saveDate() {
+      this.$http.post('save_data', this.form).then((res => {
+        if (res.status !== 200) return this.$message.error('提交失败');
+        this.formUrl = `http://192.168.31.241:8081/s/${res.data.formUrl}`;
+      }));
+      this.devicePreview = true;
+        // let res = await this.$http.post('save_data', this.form);
+        // if (res.status !== 200) return this.$message.error('提交失败');
+        // console.log(res);
+    },
+    createRandomStr() {
+      return Math.random().toString(36).slice(-8)
     }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-    .create {
-        /*position: relative;*/
-    }
-    .preview-main {
-        box-sizing: border-box;
-        min-height: 70vh;
-        border-radius: 20px;
-        height: 76px;
-        line-height: 56px;
-        text-align: center;
-        padding: 10px;
-        overflow:scroll;
-        -moz-box-shadow:0px 1px 10px #8F69DB; -webkit-box-shadow:0px 1px 10px #8F69DB; box-shadow:0px 1px 10px #8F69DB;
-    }
-    .preview {
-        position: fixed;
-        width: 20%;
-        margin: 370px -50px;
-        padding: 46px 20px 20px;
-    }
-    .preview-item {
-        border-radius: 10px;
-        background-color: #ffffff;
-        margin: 10px 0;
-    }
-    .preview-title {
-        margin: 0;
-        padding: 32px 16px 16px;
-        color: rgba(69, 90, 100, 0.6);
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        text-align: left;
-    }
-    .el-card {
-        margin-bottom: 20px;
-    }
-    .input {
-        display: flex !important;
-        align-items: center !important;
-    }
-    .el-icon-delete {
-        color: red;
-        margin-left: 5px;
-    }
-    #main {
-        width: 70%;
-    }
-    .aside {
-        position: fixed;
-        box-sizing: border-box;
-        width: 200px;
-        border-radius: 20px;
-        background-color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        font-size: 16px;
-        top: 100px;
-        text-align: center;
-    }
-    .choose-item {
-        padding: 15px;
-        cursor: pointer;
-        transition: border-color .3s,background-color .3s,color .3s;
-        box-sizing: border-box;
-        font-size: 14px;
-        color: #303133;
-    }
-    .choose-item:hover {
-        background-color: #a8c5ff;
-    }
+  .form-url {
+    width: 450px;
+  }
+  .handle-url {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+  }
+  .device-preview {
+    display: flex;
+    justify-content: space-around;
+  }
+  .create {
+      /*position: relative;*/
+  }
+  .preview-main {
+      box-sizing: border-box;
+      min-height: 70vh;
+      border-radius: 20px;
+      height: 76px;
+      line-height: 56px;
+      text-align: center;
+      padding: 10px;
+      overflow:scroll;
+      -moz-box-shadow:0px 1px 10px #8F69DB; -webkit-box-shadow:0px 1px 10px #8F69DB; box-shadow:0px 1px 10px #8F69DB;
+  }
+  .preview {
+      position: fixed;
+      width: 20%;
+      margin: 370px -50px;
+      padding: 46px 20px 20px;
+  }
+  .preview-item {
+      border-radius: 10px;
+      background-color: #ffffff;
+      margin: 10px 0;
+  }
+  .preview-title {
+      margin: 0;
+      padding: 32px 16px 16px;
+      color: rgba(69, 90, 100, 0.6);
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: left;
+  }
+  .el-card {
+      margin-bottom: 20px;
+  }
+  .input {
+      display: flex !important;
+      align-items: center !important;
+  }
+  .el-icon-delete {
+      color: red;
+      margin-left: 5px;
+  }
+  #main {
+      width: 70%;
+  }
+  .aside {
+      position: fixed;
+      box-sizing: border-box;
+      width: 200px;
+      border-radius: 20px;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      font-size: 16px;
+      top: 100px;
+      text-align: center;
+  }
+  .choose-item {
+      padding: 15px;
+      cursor: pointer;
+      transition: border-color .3s,background-color .3s,color .3s;
+      box-sizing: border-box;
+      font-size: 14px;
+      color: #303133;
+  }
+  .choose-item:hover {
+      background-color: #a8c5ff;
+  }
 </style>

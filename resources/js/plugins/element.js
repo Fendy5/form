@@ -3,7 +3,8 @@ import { Button, Form, FormItem, Input, Message,
   Container, Header, Aside, Main, Menu, Submenu,
   MenuItemGroup, MenuItem, Breadcrumb, BreadcrumbItem,
   Card, Col, Row, Table, TableColumn, Switch, Tooltip,
-  Pagination, Dialog, MessageBox, Tag, Footer, Avatar
+  Pagination, Dialog, MessageBox, Tag, Footer, Avatar, Checkbox,
+  Popconfirm,Icon
 } from 'element-ui'
 
 Vue.use(Button);
@@ -32,5 +33,8 @@ Vue.use(Dialog);
 Vue.use(Tag);
 Vue.use(Footer);
 Vue.use(Avatar);
+Vue.use(Checkbox);
+Vue.use(Popconfirm);
+Vue.use(Icon);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

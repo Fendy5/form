@@ -21,6 +21,7 @@ class CreateFormsTable extends Migration
             $table->json('content');
             $table->char('status', 1);//0未发布、1发布中、2已回收
             $table->foreign('user_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

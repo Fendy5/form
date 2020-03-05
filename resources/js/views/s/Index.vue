@@ -4,64 +4,78 @@
       <van-loading size="36" />
     </div>
     <div v-else-if="status===1" class="preview-main">
-      <h2>{{form.title}}</h2>
+      <div v-if="form.formStatus!=='2'">
+        <div v-if="form.formStatus==='0'"  class="preview-warn">
+          该问卷为临时问卷，只适合于预览时使用~
+        </div>
+        <h2 style="margin-top: 40px;">{{form.title}}</h2>
+        <div v-for="(items,index) in form.content" :key="index" class="preview-item">
+          <van-radio-group  v-model="answer.content[index].options[0]" v-if="items.type === 'single-choose'" >
 
-      <div v-for="(items,index) in form.content" :key="index" class="preview-item">
-        <van-radio-group  v-model="answer.content[index].options[0]" v-if="items.type === 'single-choose'" >
+            <div class="preview-title">
+              {{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})
+              <!--            <span v-if="items.required " class="require-info">选项必填</span>-->
+            </div>
+            <van-cell-group class="choose" v-for="(item,idx) in items.options"  :key="idx">
+              <van-cell clickable  @click="saveOptions(item,index)" :title="item|title(idx)" >
+                <van-radio slot="right-icon" :name="item" />
+              </van-cell>
+            </van-cell-group>
+          </van-radio-group>
 
-          <div class="preview-title">
-            {{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})
-<!--            <span v-if="items.required " class="require-info">选项必填</span>-->
+          <div v-else-if="items.type==='textarea'" class="textarea">
+            <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}</div>
+            <van-field  v-model="answer.content[index].text" type="textarea" placeholder="请输入内容"
+                        :rows="items.row" autosize
+            />
           </div>
-          <van-cell-group class="choose" v-for="(item,idx) in items.options"  :key="idx">
-            <van-cell clickable  @click="saveOptions(item,index)" :title="item|title(idx)" >
-              <van-radio slot="right-icon" :name="item" />
-            </van-cell>
-          </van-cell-group>
-        </van-radio-group>
 
-        <div v-else-if="items.type==='textarea'" class="textarea">
-          <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}</div>
-          <van-field  v-model="answer.content[index].text" type="textarea" placeholder="请输入内容"
-            :rows="items.row" autosize
-          />
+          <van-checkbox-group v-else v-model="answer.content[index].options">
+            <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})</div>
+            <van-cell-group v-for="(item,idx) in items.options"  :key="idx">
+              <van-cell clickable :title="item|title(idx)" @click="saveMulOptions('ref'+items.id,idx)">
+                <van-checkbox slot="right-icon" :name="item" :ref="'ref'+items.id" />
+              </van-cell>
+            </van-cell-group>
+          </van-checkbox-group>
+
         </div>
-
-        <van-checkbox-group v-else v-model="answer.content[index].options">
-          <div class="preview-title">{{index+1}}、<span v-if="items.required" class="require">*</span>{{items.title}}({{questionType[items.type]}})</div>
-          <van-cell-group v-for="(item,idx) in items.options"  :key="idx">
-            <van-cell clickable :title="item|title(idx)" @click="saveMulOptions('ref'+items.id,idx)">
-              <van-checkbox slot="right-icon" :name="item" :ref="'ref'+items.id" />
-            </van-cell>
-          </van-cell-group>
-        </van-checkbox-group>
-
-      </div>
-
-      <div class="btn">
-        <van-button loading-text="提交中..." :loading="submitting"  @click="submitAnswer" type="primary" size="large">提交</van-button>
-      </div>
-      <div class="copyright">
-        <div>Copyright © 2020 Fendy</div>
-        <div>
-          <span> The system is provided by <a href="">秋霁问卷</a> </span>
+        <div class="btn">
+          <van-button :disabled="form.formStatus==='0'" loading-text="提交中..." :loading="submitting"  @click="submitAnswer" type="primary" size="large">提交</van-button>
+        </div>
+        <div class="copyright">
+          <div>Copyright © 2020 Fendy</div>
+          <div>
+            <span> The system is provided by <a href="">秋霁问卷</a> </span>
+          </div>
         </div>
       </div>
+      <div class="form-pause" v-else>
+        <van-icon color="white" size="120px" name="warning-o" />
+        <p>问卷已经停止访问</p>
+      </div>
+
+
     </div>
     <div  class="finish" v-else>
       问卷到此结束，感谢你的参与！
     </div>
+    <vue-scroll-progress-bar  height="5px" />
   </div>
 </template>
 
 <script>
   import Notify from "vant/lib/notify";
-
+  import { VueScrollProgressBar } from '@guillaumebriday/vue-scroll-progress-bar'
   export default {
+    components:{
+      VueScrollProgressBar
+    },
     data() {
       return {
         radio: '',
         form: {
+          formStatus: '2',
           id: '',
           title: '',
           content:[],
@@ -144,6 +158,32 @@
 </script>
 
 <style lang="scss" scoped>
+  .form-pause {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .form-pause p {
+    color: black;
+    font-size: 20px;
+  }
+  .preview-warn {
+    align-items: center;
+    height: 40px;
+    position: fixed;
+    display: flex;
+    top: 0;
+    justify-content: center;
+    z-index: 99;
+    width: 100%;
+    padding: 0 16px;
+    color: #ed6a0c;
+    font-size: 14px;
+    line-height: 24px;
+    background-color: #fffbe8;
+  }
   .finish {
     font-size: larger;
     width: 100%;

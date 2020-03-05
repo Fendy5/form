@@ -162,6 +162,315 @@ module.exports = _interopRequireDefault;
 
 /***/ }),
 
+/***/ "./node_modules/@guillaumebriday/vue-scroll-progress-bar/dist/vue-scroll-progress-bar.es.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@guillaumebriday/vue-scroll-progress-bar/dist/vue-scroll-progress-bar.es.js ***!
+  \**************************************************************************************************/
+/*! exports provided: default, VueScrollProgressBar, install */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VueScrollProgressBar", function() { return VueScrollProgressBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var script = {
+  name: 'VueScrollProgressBar',
+  props: {
+    height: {
+      type: String,
+      default: '.5rem'
+    },
+    zIndex: {
+      type: String,
+      default: '50'
+    },
+    backgroundColor: {
+      type: String,
+      default: 'linear-gradient(to right, #38C172, #51D88A)'
+    },
+    containerColor: {
+      type: String,
+      default: 'transparent'
+    },
+    barClass: {
+      type: Object,
+      default: function _default() {}
+    },
+    containerClass: {
+      type: Object,
+      default: function _default() {
+        return {
+          'progress-bar-container--container': true
+        };
+      }
+    }
+  },
+  data: function data() {
+    return {
+      width: 0
+    };
+  },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+    window.dispatchEvent(new Event('scroll'));
+  },
+  destroyed: function destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    handleScroll: function handleScroll() {
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      this.width = window.scrollY / height * 100;
+      var eventWidth = Math.ceil(this.width);
+
+      if (eventWidth === 0) {
+        this.$emit('begin');
+      }
+
+      if (eventWidth === 100) {
+        this.$emit('complete');
+      }
+    }
+  }
+};
+
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+    if (typeof shadowMode !== 'boolean') {
+        createInjectorSSR = createInjector;
+        createInjector = shadowMode;
+        shadowMode = false;
+    }
+    // Vue.extend constructor export interop.
+    const options = typeof script === 'function' ? script.options : script;
+    // render functions
+    if (template && template.render) {
+        options.render = template.render;
+        options.staticRenderFns = template.staticRenderFns;
+        options._compiled = true;
+        // functional template
+        if (isFunctionalTemplate) {
+            options.functional = true;
+        }
+    }
+    // scopedId
+    if (scopeId) {
+        options._scopeId = scopeId;
+    }
+    let hook;
+    if (moduleIdentifier) {
+        // server build
+        hook = function (context) {
+            // 2.3 injection
+            context =
+                context || // cached call
+                    (this.$vnode && this.$vnode.ssrContext) || // stateful
+                    (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+            // 2.2 with runInNewContext: true
+            if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                context = __VUE_SSR_CONTEXT__;
+            }
+            // inject component styles
+            if (style) {
+                style.call(this, createInjectorSSR(context));
+            }
+            // register component module identifier for async chunk inference
+            if (context && context._registeredComponents) {
+                context._registeredComponents.add(moduleIdentifier);
+            }
+        };
+        // used by ssr in case component is cached and beforeCreate
+        // never gets called
+        options._ssrRegister = hook;
+    }
+    else if (style) {
+        hook = shadowMode
+            ? function (context) {
+                style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+            }
+            : function (context) {
+                style.call(this, createInjector(context));
+            };
+    }
+    if (hook) {
+        if (options.functional) {
+            // register for functional component in vue file
+            const originalRender = options.render;
+            options.render = function renderWithStyleInjection(h, context) {
+                hook.call(context);
+                return originalRender(h, context);
+            };
+        }
+        else {
+            // inject component registration as beforeCreate hook
+            const existing = options.beforeCreate;
+            options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+        }
+    }
+    return script;
+}
+
+const isOldIE = typeof navigator !== 'undefined' &&
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+function createInjector(context) {
+    return (id, style) => addStyle(id, style);
+}
+let HEAD;
+const styles = {};
+function addStyle(id, css) {
+    const group = isOldIE ? css.media || 'default' : id;
+    const style = styles[group] || (styles[group] = { ids: new Set(), styles: [] });
+    if (!style.ids.has(id)) {
+        style.ids.add(id);
+        let code = css.source;
+        if (css.map) {
+            // https://developer.chrome.com/devtools/docs/javascript-debugging
+            // this makes source maps inside style tags work properly in Chrome
+            code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+            // http://stackoverflow.com/a/26603875
+            code +=
+                '\n/*# sourceMappingURL=data:application/json;base64,' +
+                    btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+                    ' */';
+        }
+        if (!style.element) {
+            style.element = document.createElement('style');
+            style.element.type = 'text/css';
+            if (css.media)
+                style.element.setAttribute('media', css.media);
+            if (HEAD === undefined) {
+                HEAD = document.head || document.getElementsByTagName('head')[0];
+            }
+            HEAD.appendChild(style.element);
+        }
+        if ('styleSheet' in style.element) {
+            style.styles.push(code);
+            style.element.styleSheet.cssText = style.styles
+                .filter(Boolean)
+                .join('\n');
+        }
+        else {
+            const index = style.ids.size - 1;
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index])
+                style.element.removeChild(nodes[index]);
+            if (nodes.length)
+                style.element.insertBefore(textNode, nodes[index]);
+            else
+                style.element.appendChild(textNode);
+        }
+    }
+}
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      class: _vm.containerClass,
+      style: {
+        background: _vm.containerColor,
+        zIndex: _vm.zIndex
+      }
+    },
+    [
+      _c("div", {
+        class: _vm.barClass,
+        style: {
+          width: _vm.width + "%",
+          height: _vm.height,
+          background: _vm.backgroundColor
+        }
+      })
+    ]
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = function (inject) {
+    if (!inject) return
+    inject("data-v-2fde3600_0", { source: "\n.progress-bar-container--container[data-v-2fde3600] {\n  position: fixed;\n  width: 100%;\n  top: 0;\n  left: 0;\n}\n", map: {"version":3,"sources":["/Users/guillaumebriday/Sites/vue-scroll-progressbar/src/components/VueScrollProgressBar.vue"],"names":[],"mappings":";AA6FA;EACA,eAAA;EACA,WAAA;EACA,MAAA;EACA,OAAA;AACA","file":"VueScrollProgressBar.vue","sourcesContent":["<template>\n  <div\n    :class=\"containerClass\"\n    :style=\"{\n      background: containerColor,\n      zIndex: zIndex\n    }\"\n  >\n    <div\n      :class=\"barClass\"\n      :style=\"{\n        width: `${width}%`,\n        height: height,\n        background: backgroundColor\n      }\"\n    />\n  </div>\n</template>\n\n<script>\nexport default {\n  name: 'VueScrollProgressBar',\n\n  props: {\n    height: {\n      type: String,\n      default: '.5rem'\n    },\n\n    zIndex: {\n      type: String,\n      default: '50'\n    },\n\n    backgroundColor: {\n      type: String,\n      default: 'linear-gradient(to right, #38C172, #51D88A)'\n    },\n\n    containerColor: {\n      type: String,\n      default: 'transparent'\n    },\n\n    barClass: {\n      type: Object,\n      default: () => {}\n    },\n\n    containerClass: {\n      type: Object,\n      default: () => {\n        return {\n          'progress-bar-container--container': true\n        }\n      }\n    }\n  },\n\n  data () {\n    return {\n      width: 0\n    }\n  },\n\n  mounted () {\n    window.addEventListener('scroll', this.handleScroll)\n    window.dispatchEvent(new Event('scroll'))\n  },\n\n  destroyed () {\n    window.removeEventListener('scroll', this.handleScroll)\n  },\n\n  methods: {\n    handleScroll () {\n      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight\n      this.width = (window.scrollY / height) * 100\n      const eventWidth = Math.ceil(this.width)\n\n      if (eventWidth === 0) {\n        this.$emit('begin')\n      }\n\n      if (eventWidth === 100) {\n        this.$emit('complete')\n      }\n    }\n  }\n}\n</script>\n\n<style scoped>\n.progress-bar-container--container {\n  position: fixed;\n  width: 100%;\n  top: 0;\n  left: 0;\n}\n</style>\n"]}, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__ = "data-v-2fde3600";
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var VueScrollProgressBar = normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );
+
+function install(Vue) {
+  Vue.component(VueScrollProgressBar.name, VueScrollProgressBar);
+} // Create module definition for Vue.use()
+
+var plugin = {
+  install: install
+}; // Auto-install when vue is found (eg. in browser via <script> tag)
+
+var GlobalVue = null;
+
+if (typeof window !== 'undefined') {
+  GlobalVue = window.Vue;
+} else if (typeof global !== 'undefined') {
+  GlobalVue = global.Vue;
+}
+
+if (GlobalVue) {
+  GlobalVue.use(plugin);
+} // To allow use as module (npm/webpack/etc.) export component
+
+/* harmony default export */ __webpack_exports__["default"] = (plugin);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@vue/babel-helper-vue-jsx-merge-props/dist/helper.js ***!
@@ -1999,6 +2308,17 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vant_lib_notify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vant/lib/notify */ "./node_modules/vant/lib/notify/index.js");
 /* harmony import */ var vant_lib_notify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vant_lib_notify__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _guillaumebriday_vue_scroll_progress_bar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @guillaumebriday/vue-scroll-progress-bar */ "./node_modules/@guillaumebriday/vue-scroll-progress-bar/dist/vue-scroll-progress-bar.es.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2056,11 +2376,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueScrollProgressBar: _guillaumebriday_vue_scroll_progress_bar__WEBPACK_IMPORTED_MODULE_1__["VueScrollProgressBar"]
+  },
   data: function data() {
     return {
       radio: '',
       form: {
+        formStatus: '2',
         id: '',
         title: '',
         content: []
@@ -2162,7 +2487,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".finish[data-v-897ee532] {\n  font-size: larger;\n  width: 100%;\n  text-align: center;\n  position: relative;\n  top: 50px;\n  margin: 50% 0;\n  color: wheat;\n}\n.require-info[data-v-897ee532] {\n  color: red;\n  font-size: 12px;\n}\n.require[data-v-897ee532] {\n  color: red;\n}\nh2[data-v-897ee532] {\n  text-align: center;\n}\n.preview-item[data-v-897ee532] {\n  border-radius: 5px;\n  background-color: #ffffff;\n  padding: 10px 0;\n  margin: 10px;\n}\n.preview-title[data-v-897ee532] {\n  margin: 0;\n  padding: 10px 16px 16px;\n  color: rgba(69, 90, 100, 0.6);\n  font-weight: normal;\n  font-size: 14px;\n  line-height: 16px;\n  text-align: left;\n}\n.el-card[data-v-897ee532] {\n  margin-bottom: 20px;\n}\n.choose[data-v-897ee532] {\n  padding-left: 15px;\n}\n.loading[data-v-897ee532] {\n  border-radius: 5px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n}\n.btn[data-v-897ee532] {\n  width: 80%;\n  margin: 15px auto;\n  text-align: center;\n}\n.copyright[data-v-897ee532] {\n  padding: 32px 0 40px;\n  text-align: center;\n  color: rgba(0, 0, 0, 0.3);\n  position: relative;\n  z-index: 10;\n  font-size: 14px;\n}", ""]);
+exports.push([module.i, ".form-pause[data-v-897ee532] {\n  position: absolute;\n  text-align: center;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n}\n.form-pause p[data-v-897ee532] {\n  color: black;\n  font-size: 20px;\n}\n.preview-warn[data-v-897ee532] {\n  -webkit-box-align: center;\n          align-items: center;\n  height: 40px;\n  position: fixed;\n  display: -webkit-box;\n  display: flex;\n  top: 0;\n  -webkit-box-pack: center;\n          justify-content: center;\n  z-index: 99;\n  width: 100%;\n  padding: 0 16px;\n  color: #ed6a0c;\n  font-size: 14px;\n  line-height: 24px;\n  background-color: #fffbe8;\n}\n.finish[data-v-897ee532] {\n  font-size: larger;\n  width: 100%;\n  text-align: center;\n  position: relative;\n  top: 50px;\n  margin: 50% 0;\n  color: wheat;\n}\n.require-info[data-v-897ee532] {\n  color: red;\n  font-size: 12px;\n}\n.require[data-v-897ee532] {\n  color: red;\n}\nh2[data-v-897ee532] {\n  text-align: center;\n}\n.preview-item[data-v-897ee532] {\n  border-radius: 5px;\n  background-color: #ffffff;\n  padding: 10px 0;\n  margin: 10px;\n}\n.preview-title[data-v-897ee532] {\n  margin: 0;\n  padding: 10px 16px 16px;\n  color: rgba(69, 90, 100, 0.6);\n  font-weight: normal;\n  font-size: 14px;\n  line-height: 16px;\n  text-align: left;\n}\n.el-card[data-v-897ee532] {\n  margin-bottom: 20px;\n}\n.choose[data-v-897ee532] {\n  padding-left: 15px;\n}\n.loading[data-v-897ee532] {\n  border-radius: 5px;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n}\n.btn[data-v-897ee532] {\n  width: 80%;\n  margin: 15px auto;\n  text-align: center;\n}\n.copyright[data-v-897ee532] {\n  padding: 32px 0 40px;\n  text-align: center;\n  color: rgba(0, 0, 0, 0.3);\n  position: relative;\n  z-index: 10;\n  font-size: 14px;\n}", ""]);
 
 // exports
 
@@ -24657,227 +24982,281 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "app" }, [
-    _vm.status === 0
-      ? _c(
-          "div",
-          { staticClass: "loading" },
-          [_c("van-loading", { attrs: { size: "36" } })],
-          1
-        )
-      : _vm.status === 1
-      ? _c(
-          "div",
-          { staticClass: "preview-main" },
-          [
-            _c("h2", [_vm._v(_vm._s(_vm.form.title))]),
-            _vm._v(" "),
-            _vm._l(_vm.form.content, function(items, index) {
-              return _c(
-                "div",
-                { key: index, staticClass: "preview-item" },
-                [
-                  items.type === "single-choose"
-                    ? _c(
-                        "van-radio-group",
-                        {
-                          model: {
-                            value: _vm.answer.content[index].options[0],
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.answer.content[index].options,
-                                0,
-                                $$v
-                              )
-                            },
-                            expression: "answer.content[index].options[0]"
-                          }
-                        },
-                        [
-                          _c("div", { staticClass: "preview-title" }, [
-                            _vm._v("\n            " + _vm._s(index + 1) + "、"),
-                            items.required
-                              ? _c("span", { staticClass: "require" }, [
-                                  _vm._v("*")
-                                ])
-                              : _vm._e(),
-                            _vm._v(
-                              _vm._s(items.title) +
-                                "(" +
-                                _vm._s(_vm.questionType[items.type]) +
-                                ")\n"
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(items.options, function(item, idx) {
-                            return _c(
-                              "van-cell-group",
-                              { key: idx, staticClass: "choose" },
-                              [
-                                _c(
-                                  "van-cell",
-                                  {
-                                    attrs: {
-                                      clickable: "",
-                                      title: _vm._f("title")(item, idx)
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.saveOptions(item, index)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("van-radio", {
-                                      attrs: { slot: "right-icon", name: item },
-                                      slot: "right-icon"
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    : items.type === "textarea"
-                    ? _c(
+  return _c(
+    "div",
+    { staticClass: "app" },
+    [
+      _vm.status === 0
+        ? _c(
+            "div",
+            { staticClass: "loading" },
+            [_c("van-loading", { attrs: { size: "36" } })],
+            1
+          )
+        : _vm.status === 1
+        ? _c("div", { staticClass: "preview-main" }, [
+            _vm.form.formStatus !== "2"
+              ? _c(
+                  "div",
+                  [
+                    _vm.form.formStatus === "0"
+                      ? _c("div", { staticClass: "preview-warn" }, [
+                          _vm._v(
+                            "\n        该问卷为临时问卷，只适合于预览时使用~\n      "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("h2", { staticStyle: { "margin-top": "40px" } }, [
+                      _vm._v(_vm._s(_vm.form.title))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.form.content, function(items, index) {
+                      return _c(
                         "div",
-                        { staticClass: "textarea" },
+                        { key: index, staticClass: "preview-item" },
                         [
-                          _c("div", { staticClass: "preview-title" }, [
-                            _vm._v(_vm._s(index + 1) + "、"),
-                            items.required
-                              ? _c("span", { staticClass: "require" }, [
-                                  _vm._v("*")
-                                ])
-                              : _vm._e(),
-                            _vm._v(_vm._s(items.title))
-                          ]),
-                          _vm._v(" "),
-                          _c("van-field", {
-                            attrs: {
-                              type: "textarea",
-                              placeholder: "请输入内容",
-                              rows: items.row,
-                              autosize: ""
-                            },
-                            model: {
-                              value: _vm.answer.content[index].text,
-                              callback: function($$v) {
-                                _vm.$set(_vm.answer.content[index], "text", $$v)
-                              },
-                              expression: "answer.content[index].text"
-                            }
-                          })
+                          items.type === "single-choose"
+                            ? _c(
+                                "van-radio-group",
+                                {
+                                  model: {
+                                    value: _vm.answer.content[index].options[0],
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.answer.content[index].options,
+                                        0,
+                                        $$v
+                                      )
+                                    },
+                                    expression:
+                                      "answer.content[index].options[0]"
+                                  }
+                                },
+                                [
+                                  _c("div", { staticClass: "preview-title" }, [
+                                    _vm._v(
+                                      "\n            " +
+                                        _vm._s(index + 1) +
+                                        "、"
+                                    ),
+                                    items.required
+                                      ? _c("span", { staticClass: "require" }, [
+                                          _vm._v("*")
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(
+                                      _vm._s(items.title) +
+                                        "(" +
+                                        _vm._s(_vm.questionType[items.type]) +
+                                        ")\n            "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._l(items.options, function(item, idx) {
+                                    return _c(
+                                      "van-cell-group",
+                                      { key: idx, staticClass: "choose" },
+                                      [
+                                        _c(
+                                          "van-cell",
+                                          {
+                                            attrs: {
+                                              clickable: "",
+                                              title: _vm._f("title")(item, idx)
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.saveOptions(
+                                                  item,
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("van-radio", {
+                                              attrs: {
+                                                slot: "right-icon",
+                                                name: item
+                                              },
+                                              slot: "right-icon"
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  })
+                                ],
+                                2
+                              )
+                            : items.type === "textarea"
+                            ? _c(
+                                "div",
+                                { staticClass: "textarea" },
+                                [
+                                  _c("div", { staticClass: "preview-title" }, [
+                                    _vm._v(_vm._s(index + 1) + "、"),
+                                    items.required
+                                      ? _c("span", { staticClass: "require" }, [
+                                          _vm._v("*")
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(_vm._s(items.title))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("van-field", {
+                                    attrs: {
+                                      type: "textarea",
+                                      placeholder: "请输入内容",
+                                      rows: items.row,
+                                      autosize: ""
+                                    },
+                                    model: {
+                                      value: _vm.answer.content[index].text,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.answer.content[index],
+                                          "text",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "answer.content[index].text"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _c(
+                                "van-checkbox-group",
+                                {
+                                  model: {
+                                    value: _vm.answer.content[index].options,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.answer.content[index],
+                                        "options",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "answer.content[index].options"
+                                  }
+                                },
+                                [
+                                  _c("div", { staticClass: "preview-title" }, [
+                                    _vm._v(_vm._s(index + 1) + "、"),
+                                    items.required
+                                      ? _c("span", { staticClass: "require" }, [
+                                          _vm._v("*")
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(
+                                      _vm._s(items.title) +
+                                        "(" +
+                                        _vm._s(_vm.questionType[items.type]) +
+                                        ")"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._l(items.options, function(item, idx) {
+                                    return _c(
+                                      "van-cell-group",
+                                      { key: idx },
+                                      [
+                                        _c(
+                                          "van-cell",
+                                          {
+                                            attrs: {
+                                              clickable: "",
+                                              title: _vm._f("title")(item, idx)
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.saveMulOptions(
+                                                  "ref" + items.id,
+                                                  idx
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("van-checkbox", {
+                                              ref: "ref" + items.id,
+                                              refInFor: true,
+                                              attrs: {
+                                                slot: "right-icon",
+                                                name: item
+                                              },
+                                              slot: "right-icon"
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  })
+                                ],
+                                2
+                              )
                         ],
                         1
                       )
-                    : _c(
-                        "van-checkbox-group",
-                        {
-                          model: {
-                            value: _vm.answer.content[index].options,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.answer.content[index],
-                                "options",
-                                $$v
-                              )
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "btn" },
+                      [
+                        _c(
+                          "van-button",
+                          {
+                            attrs: {
+                              disabled: _vm.form.formStatus === "0",
+                              "loading-text": "提交中...",
+                              loading: _vm.submitting,
+                              type: "primary",
+                              size: "large"
                             },
-                            expression: "answer.content[index].options"
-                          }
-                        },
-                        [
-                          _c("div", { staticClass: "preview-title" }, [
-                            _vm._v(_vm._s(index + 1) + "、"),
-                            items.required
-                              ? _c("span", { staticClass: "require" }, [
-                                  _vm._v("*")
-                                ])
-                              : _vm._e(),
-                            _vm._v(
-                              _vm._s(items.title) +
-                                "(" +
-                                _vm._s(_vm.questionType[items.type]) +
-                                ")"
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(items.options, function(item, idx) {
-                            return _c(
-                              "van-cell-group",
-                              { key: idx },
-                              [
-                                _c(
-                                  "van-cell",
-                                  {
-                                    attrs: {
-                                      clickable: "",
-                                      title: _vm._f("title")(item, idx)
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.saveMulOptions(
-                                          "ref" + items.id,
-                                          idx
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("van-checkbox", {
-                                      ref: "ref" + items.id,
-                                      refInFor: true,
-                                      attrs: { slot: "right-icon", name: item },
-                                      slot: "right-icon"
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          })
-                        ],
-                        2
-                      )
-                ],
-                1
-              )
-            }),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "btn" },
-              [
-                _c(
-                  "van-button",
-                  {
-                    attrs: {
-                      "loading-text": "提交中...",
-                      loading: _vm.submitting,
-                      type: "primary",
-                      size: "large"
-                    },
-                    on: { click: _vm.submitAnswer }
-                  },
-                  [_vm._v("提交")]
+                            on: { click: _vm.submitAnswer }
+                          },
+                          [_vm._v("提交")]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm._m(0)
+                  ],
+                  2
                 )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm._m(0)
-          ],
-          2
-        )
-      : _c("div", { staticClass: "finish" }, [
-          _vm._v("\n      问卷到此结束，感谢你的参与！\n    ")
-        ])
-  ])
+              : _c(
+                  "div",
+                  { staticClass: "form-pause" },
+                  [
+                    _c("van-icon", {
+                      attrs: {
+                        color: "white",
+                        size: "120px",
+                        name: "warning-o"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("问卷已经停止访问")])
+                  ],
+                  1
+                )
+          ])
+        : _c("div", { staticClass: "finish" }, [
+            _vm._v("\n    问卷到此结束，感谢你的参与！\n  ")
+          ]),
+      _vm._v(" "),
+      _c("vue-scroll-progress-bar", { attrs: { height: "5px" } })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -37035,29 +37414,23 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _views_s_Index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/views/s/Index */ "./resources/js/views/s/Index.vue");
-/* harmony import */ var _plugins_vant_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/plugins/vant.js */ "./resources/js/plugins/vant.js");
-/* harmony import */ var vant_lib_index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vant/lib/index.css */ "./node_modules/vant/lib/index.css");
-/* harmony import */ var vant_lib_index_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vant_lib_index_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _views_s_Index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/views/s/Index */ "./resources/js/views/s/Index.vue");
+/* harmony import */ var _plugins_vant_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/plugins/vant.js */ "./resources/js/plugins/vant.js");
+/* harmony import */ var vant_lib_index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vant/lib/index.css */ "./node_modules/vant/lib/index.css");
+/* harmony import */ var vant_lib_index_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vant_lib_index_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_views_s_Index__WEBPACK_IMPORTED_MODULE_1__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('display', _views_s_Index__WEBPACK_IMPORTED_MODULE_1__["default"]);
-axios__WEBPACK_IMPORTED_MODULE_4___default.a.defaults.baseURL = 'http://192.168.31.241:8081/';
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_4___default.a;
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.productionTip = false;
-var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
-  el: '#app',
-  components: {
-    S: _views_s_Index__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
+Vue.component('display', _views_s_Index__WEBPACK_IMPORTED_MODULE_0__["default"]);
+axios__WEBPACK_IMPORTED_MODULE_3___default.a.defaults.baseURL = 'http://192.168.31.241:8081/';
+Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_3___default.a;
+Vue.config.productionTip = false;
+var app = new Vue({
+  el: '#app'
 });
 
 /***/ }),

@@ -85180,26 +85180,28 @@ var render = function() {
                             _vm._v("创建问卷")
                           ]),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "question" } }, [
-                            _vm._v("在线问卷")
-                          ]),
+                          _c(
+                            "el-menu-item",
+                            { attrs: { index: "/question" } },
+                            [_vm._v("在线问卷")]
+                          ),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "form" } }, [
+                          _c("el-menu-item", { attrs: { index: "/form" } }, [
                             _vm._v("报名表单")
                           ]),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "vote" } }, [
+                          _c("el-menu-item", { attrs: { index: "/vote" } }, [
                             _vm._v("在线投票")
                           ]),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "exam" } }, [
+                          _c("el-menu-item", { attrs: { index: "/exam" } }, [
                             _vm._v("考试检测")
                           ])
                         ],
                         2
                       ),
                       _vm._v(" "),
-                      _c("el-menu-item", { attrs: { index: "my_question" } }, [
+                      _c("el-menu-item", { attrs: { index: "/my_question" } }, [
                         _vm._v("我的问卷")
                       ])
                     ],
@@ -103233,6 +103235,10 @@ var Vote = function Vote() {
 
 var MyQuestion = function MyQuestion() {
   return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/MyQuestion */ "./resources/js/views/mine/MyQuestion.vue"));
+};
+
+var EditForm = function EditForm() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/edit/EditForm */ "./resources/js/views/edit/EditForm.vue"));
 }; // const Recovery = () => import(/* webpackChunkName: "create" */ '../views/mine/Recovery');
 // const Released = () => import(/* webpackChunkName: "create" */ '../views/mine/Released');
 
@@ -103257,11 +103263,28 @@ var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       component: Vote
     }, {
       path: '/my_question',
-      component: MyQuestion
+      component: MyQuestion,
+      meta: {
+        title: '我的问卷'
+      }
+    }, {
+      path: '/edit_form/:id',
+      component: EditForm,
+      meta: {
+        title: '编辑问卷'
+      }
     } // { path: '/released', component: Released },
     // { path: '/recovery', component: Recovery }
     ]
   }]
+});
+mainHome.beforeEach(function (to, from, next) {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+
+  next();
 });
 /* harmony default export */ __webpack_exports__["default"] = (mainHome);
 

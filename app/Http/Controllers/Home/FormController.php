@@ -18,17 +18,34 @@ class FormController extends Controller
     //save form data
     public function saveData()
     {
-        $form = new Form();
-        $form->title = \request('title');
-        $form->user_id = session()->get('user')->id;
-        $form->content = json_encode(\request('content'));
-        $form->status = 0;
-        $formUrl = str_random(16);
-        $form->question_id = $formUrl;
-        $form->save();
-        return [
-            'formUrl' => $formUrl
-        ];
+        $id = \request('id');
+        if ($id) {
+            Form::where('question_id',$id)->update([
+                'title'=>\request('title'),
+                'content'=>json_encode(\request('content'))
+            ]);
+            return [
+                'formUrl' => $id
+            ];
+        }else{
+            $form = new Form();
+            $form->title = \request('title');
+            $form->user_id = session()->get('user')->id;
+            $form->content = json_encode(\request('content'));
+            $form->status = 0;
+            $formUrl = str_random(16);
+            $form->question_id = $formUrl;
+            $form->save();
+            return [
+                'formUrl' => $formUrl
+            ];
+        }
+    }
+
+    public function saveRelease()
+    {
+        $this->saveData();
+        return $this->release();
     }
 
     //display form content
@@ -120,5 +137,28 @@ class FormController extends Controller
         return $rsp;
     }
 
+    public function getForm()
+    {
+        $id = \request('id');
+        $res = (new Form())->getForm($id);
+        if ($res) {
+            $rsp = [
+                'code' => 1,
+                'msg' => '删除成功！',
+                'data' => [
+                    'id' => $id,
+                    'title'   => $res->title,
+                    'formStatus'=>$res->status,
+                    'content' => json_decode($res->content)
+                ]
+            ];
+        } else {
+            $rsp = [
+                'code' => 0,
+                'msg' => '获取失败！',
+            ];
+        }
+        return $rsp;
+    }
 
 }

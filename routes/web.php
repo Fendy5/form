@@ -40,6 +40,8 @@ Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::post('get_forms', 'FormController@getMyForm');
     Route::post('delete_form', 'FormController@deleteForm');
     Route::post('release', 'FormController@release');
+    Route::post('save_release', 'FormController@saveRelease');
+    Route::post('get_form', 'FormController@getForm');
     Route::get('/logout', 'LoginController@logout');
 });
 

@@ -10,12 +10,12 @@
                     <el-menu router class="el-menu-demo" mode="horizontal" >
                         <el-submenu index="1">
                             <template slot="title">创建问卷</template>
-                            <el-menu-item index="question">在线问卷</el-menu-item>
-                            <el-menu-item index="form">报名表单</el-menu-item>
-                            <el-menu-item index="vote">在线投票</el-menu-item>
-                            <el-menu-item index="exam">考试检测</el-menu-item>
+                            <el-menu-item index="/question">在线问卷</el-menu-item>
+                            <el-menu-item index="/form">报名表单</el-menu-item>
+                            <el-menu-item index="/vote">在线投票</el-menu-item>
+                            <el-menu-item index="/exam">考试检测</el-menu-item>
                         </el-submenu>
-                      <el-menu-item index="my_question">我的问卷</el-menu-item>
+                      <el-menu-item index="/my_question">我的问卷</el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="4">

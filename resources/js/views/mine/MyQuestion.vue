@@ -4,14 +4,14 @@
       <div class="item-top item">
         <div class="item-title">{{form.title}}</div>
         <div class="item-info item">
-          <div class="item-id item-pd">ID:{{form.question_id}}</div>
+          <div class="item-id item-pd">ID: {{form.question_id}}</div>
           <div :style="{'color':statusColor[form.status]}" class="item-status item-pd">{{statusText[form.status]}}</div>
           <div class="item-time item-pd">{{form.created_at | convertTime}}</div>
         </div>
       </div>
       <div class="item-bottom item">
         <div class="bt-left item">
-          <div class="bt-item">编辑问卷</div>
+          <div @click="edit(form.question_id,form.status)" class="bt-item">编辑问卷</div>
           <div class="bt-item">问卷设置</div>
           <div class="bt-item">统计分析</div>
         </div>
@@ -80,13 +80,22 @@ export default {
     }
   },
   methods:{
+    edit(id,status) {
+      if (status === '1') {
+        this.$message.error('问卷已经投放，请先暂停问卷再编辑~');
+      } else {
+        this.$router.push({
+          path: `/edit_form/${id}`,
+        });
+      }
+    },
     release(id) {
       this.$http.post('release', {id: id}).then((res)=>{
         if (res.status === 200 && res.data.code === 1) {
-          this.$message.success('发布成功');
+          this.$message.success('操作成功');
           this.getForms();
         } else {
-          this.$message.error('发布失败');
+          this.$message.error('操作失败');
         }
       }).catch(reason => {this.$message.error('网络错误')})
     },

@@ -4,7 +4,7 @@ import { Button, Form, FormItem, Input, Message,
   MenuItemGroup, MenuItem, Breadcrumb, BreadcrumbItem,
   Card, Col, Row, Table, TableColumn, Switch, Tooltip,
   Pagination, Dialog, MessageBox, Tag, Footer, Avatar, Checkbox,
-  Popconfirm,Icon
+  Popconfirm,Icon,
 } from 'element-ui'
 
 Vue.use(Button);

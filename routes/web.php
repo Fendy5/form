@@ -26,8 +26,11 @@
 //	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 //});
 //
+use App\Models\Answer;
 use App\Models\Form;
 use function EasyWeChat\Kernel\Support\str_random;
+use function GuzzleHttp\Psr7\str;
+use function MongoDB\BSON\toJSON;
 
 Route::get('/login', 'Home\LoginController@login');
 Route::post('/login', 'Home\LoginController@login_post');
@@ -42,14 +45,38 @@ Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::post('release', 'FormController@release');
     Route::post('save_release', 'FormController@saveRelease');
     Route::post('get_form', 'FormController@getForm');
+    Route::post('get_answers', 'AnswerController@getAnswers');
+    Route::post('/statistic', 'StatisticController@index');
     Route::get('/logout', 'LoginController@logout');
 });
 
 Route::get('/s/{id}','Home\FormController@display');
 Route::post('/s','Home\FormController@getData');
-Route::post('/submit_answer','Home\FormController@submitAnswer');
+Route::post('/submit_answer','Home\AnswerController@submitAnswer');
 
 Route::get('/test', function () {
+
+    $id = 'zs1vmArStalUhYwL';
+    $form = Form::where('question_id',$id)->first();
+    $res = (new Answer())->getForms($form->id);
+    $answers = [];
+//    foreach ($res as $item) {
+//        $temp = [];
+//        foreach ($item as $i) {
+//            if ($i->type == 'textarea') {
+//                $temp[$i->id] = $i->text;
+//            } else {
+//                $val = [];
+//                foreach ($i->options as $option) {
+//                    array_push($val, $option->text);
+//                }
+//                $temp[$i->id] = implode(" | ", $val);
+//            }
+//        }
+//        array_push($answers, $temp);
+//    }
+    dd($answers);
+
     //字符串拼接
 //    $str = 'I am Fendy , KaiYing is my wife';
 //    $res = Str::slug($str, '*');
@@ -61,7 +88,7 @@ Route::get('/test', function () {
 
     //产生唯一字符串
 //    dd(Str::uuid());
-    dd(getUserId());
+//    dd(getUserId());
 //    $parents = [
 //            ['parent' => ['id' => 1, 'name' => 'James']],
 //            ['parent' => ['id' => 8, 'name' => 'Lisa']],

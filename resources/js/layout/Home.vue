@@ -25,8 +25,8 @@
                                 <el-avatar shape="circle" src="/images/avatar.jpg"></el-avatar>
                                 <span class="nickname">IAmLegend</span>
                             </template>
-                            <el-menu-item index="4-1">个人信息</el-menu-item>
-                            <el-menu-item @click="logout" index="4-2">退 出</el-menu-item>
+                            <el-menu-item index="my_profile">个人信息</el-menu-item>
+                            <el-menu-item @click="logout" index="/logout">退 出</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-col>

@@ -1,4 +1,7 @@
 <?php
+
+use App\Models\Form;
+
 /**
  * @ClassName ${NAME}
  * @Descridtion TODO
@@ -10,4 +13,9 @@
 function getUserId()
 {
     return session()->get('user')->id;
+}
+
+function getFormId($question_id)
+{
+    return (new Form())->getForm($question_id)->id;
 }

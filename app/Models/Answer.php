@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use function array_reduce;
+use function json_decode;
+use function json_encode;
 
 /**
  * App\Models\Answer
@@ -27,4 +31,17 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     protected $guarded = [];
+
+    public function getForms($form_id)
+    {
+        return $this->where(['form_id' => $form_id])->select(['content','created_at'])->get()
+            ->map(function ($value) {return (json_decode($value->content));});
+    }
+
+    public function serializeOption($array)
+    {
+        return array_reduce($array, function ($a,$b) {
+            return $a + $b;
+        });
+    }
 }

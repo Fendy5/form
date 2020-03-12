@@ -47,6 +47,8 @@ Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::post('get_form', 'FormController@getForm');
     Route::post('get_answers', 'AnswerController@getAnswers');
     Route::post('/statistic', 'StatisticController@index');
+    Route::post('/get_profile', 'UserController@getUser');
+    Route::post('/save_profile', 'UserController@saveUser');
     Route::get('/logout', 'LoginController@logout');
 });
 

@@ -907,20 +907,47 @@ __webpack_require__.r(__webpack_exports__);
     return {
       ableEdit: true,
       userInfo: {
-        nickname: 'IamFendy',
-        email: 'zf@fendy5.cn',
-        wechat: 'Fendy_5',
-        QQ: '862159772',
-        password: ''
+        name: '',
+        email: '',
+        password: '',
+        fee: 0.00,
+        balance: ''
       }
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$http.post('get_profile').then(function (res) {
+      if (res.status === 200 && res.data.code === 1) {
+        _this.userInfo = res.data.userInfo;
+      } else {
+        _this.$message.error('获取用户信息失败');
+      }
+    })["catch"](function (reason) {
+      _this.$message.error('网络错误');
+    });
   },
   methods: {
     changeInfo: function changeInfo() {
       this.ableEdit = false;
     },
     saveInfo: function saveInfo() {
-      this.ableEdit = true;
+      var _this2 = this;
+
+      this.$http.post('save_profile', {
+        userInfo: this.userInfo
+      }).then(function (res) {
+        if (res.status === 200 && res.data.code === 1) {
+          _this2.$message.success('修改成功');
+
+          _this2.ableEdit = true;
+        } else {
+          _this2.$message.error('修改失败');
+        }
+      })["catch"](function (reason) {
+        _this2.$message.error('网络错误');
+      });
     }
   }
 });
@@ -3139,11 +3166,11 @@ var render = function() {
                       _c("el-input", {
                         attrs: { disabled: _vm.ableEdit },
                         model: {
-                          value: _vm.userInfo.nickname,
+                          value: _vm.userInfo.name,
                           callback: function($$v) {
-                            _vm.$set(_vm.userInfo, "nickname", $$v)
+                            _vm.$set(_vm.userInfo, "name", $$v)
                           },
-                          expression: "userInfo.nickname"
+                          expression: "userInfo.name"
                         }
                       })
                     ],
@@ -3170,46 +3197,10 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "el-form-item",
-                    { attrs: { label: "微信" } },
-                    [
-                      _c("el-input", {
-                        attrs: { disabled: _vm.ableEdit },
-                        model: {
-                          value: _vm.userInfo.wechat,
-                          callback: function($$v) {
-                            _vm.$set(_vm.userInfo, "wechat", $$v)
-                          },
-                          expression: "userInfo.wechat"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "QQ" } },
-                    [
-                      _c("el-input", {
-                        attrs: { disabled: _vm.ableEdit },
-                        model: {
-                          value: _vm.userInfo.QQ,
-                          callback: function($$v) {
-                            _vm.$set(_vm.userInfo, "QQ", $$v)
-                          },
-                          expression: "userInfo.QQ"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
                     { attrs: { label: "密码" } },
                     [
                       _c("el-input", {
-                        attrs: { disabled: _vm.ableEdit },
+                        attrs: { type: "password", disabled: _vm.ableEdit },
                         model: {
                           value: _vm.userInfo.password,
                           callback: function($$v) {
@@ -3229,7 +3220,9 @@ var render = function() {
                       _vm._v("账户余额")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "item-right" }, [_vm._v("0.00")])
+                    _c("div", { staticClass: "item-right" }, [
+                      _vm._v(_vm._s(_vm.userInfo.balance))
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "userinfo-item" }, [
@@ -3238,7 +3231,9 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "item-right" }, [
-                      _vm._v("免费用户")
+                      _vm._v(
+                        _vm._s(_vm.userInfo.vip === 0 ? "免费用户" : "付费用户")
+                      )
                     ])
                   ]),
                   _vm._v(" "),

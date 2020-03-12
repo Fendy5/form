@@ -85193,7 +85193,7 @@ var render = function() {
                               }),
                               _vm._v(" "),
                               _c("span", { staticClass: "nickname" }, [
-                                _vm._v("IAmLegend")
+                                _vm._v("Fendy")
                               ])
                             ],
                             1

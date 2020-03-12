@@ -15,12 +15,14 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('weibo_id')->nullable();
-            $table->string('wechat_id')->nullable();
-            $table->string('qq_id')->nullable();
-            $table->string('avatar',256)->default('avatar.png');
-            $table->string('email')->unique();
+            $table->string('name',64);
+//            $table->string('weibo_id')->nullable();
+            $table->string('wechat_id',28)->nullable();
+//            $table->string('qq_id')->nullable();
+            $table->string('avatar')->default('avatar.png');
+            $table->string('email',64)->unique();
+            $table->decimal('balance')->default(0.00);
+            $table->boolean('vip')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

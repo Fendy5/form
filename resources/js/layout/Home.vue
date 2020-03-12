@@ -23,7 +23,7 @@
                         <el-submenu index="4">
                             <template slot="title">
                                 <el-avatar shape="circle" src="/images/avatar.jpg"></el-avatar>
-                                <span class="nickname">IAmLegend</span>
+                                <span class="nickname">Fendy</span>
                             </template>
                             <el-menu-item index="my_profile">个人信息</el-menu-item>
                             <el-menu-item @click="logout" index="/logout">退 出</el-menu-item>

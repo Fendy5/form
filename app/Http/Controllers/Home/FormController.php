@@ -15,7 +15,7 @@ use function view;
 
 class FormController extends Controller
 {
-    //save form data
+    //保存问卷数据
     public function saveData()
     {
         $id = \request('id');
@@ -24,9 +24,7 @@ class FormController extends Controller
                 'title'=>\request('title'),
                 'content'=>json_encode(\request('content'))
             ]);
-            return [
-                'formUrl' => $id
-            ];
+            return ['formUrl' => $id];
         }else{
             $form = new Form();
             $form->title = \request('title');
@@ -48,7 +46,7 @@ class FormController extends Controller
         return $this->release();
     }
 
-    //display form content
+    //展示问卷内容
     public function display($id)
     {
         $data = [
@@ -70,6 +68,7 @@ class FormController extends Controller
         return $data;
     }
 
+    //获取我的所有问卷表单
     public function getMyForm()
     {
         $forms = (new Form())->getForms();

@@ -12,6 +12,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use function getUserId;
 
 /**
  * App\Models\User
@@ -63,5 +64,15 @@ class User extends Model
     public function verifyLogin($email,$password)
     {
         return $this->where(['email' => $email, 'password' => $password])->first();
+    }
+
+    public function getUser()
+    {
+        return $this->where(['id' => getUserId()])->select(['name','email','balance','vip','password'])->first();
+    }
+
+    public function saveUser($userInfo)
+    {
+        return $this->where(['id' => getUserId()])->update($userInfo);
     }
 }

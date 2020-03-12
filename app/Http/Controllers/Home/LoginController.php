@@ -43,15 +43,9 @@ class LoginController extends Controller
         ];
         $user = (new User())->createUser($data);
         if ($user == 'ok') {
-            $data=[
-                'code' => 1,
-                'msg'=>'注册成功'
-            ];
+            $data=['code' => 1, 'msg'=>'注册成功'];
         }else{
-            $data=[
-                'code' => 0,
-                'msg'=>$user
-            ];
+            $data=['code' => 0, 'msg'=>$user];
         }
         return $data;
     }

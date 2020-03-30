@@ -9,6 +9,7 @@ const MyQuestion = () => import(/* webpackChunkName: "create" */ '../views/mine/
 const MyProfile = () => import(/* webpackChunkName: "create" */ '../views/mine/MyProfile');
 const StatisticForm = () => import(/* webpackChunkName: "create" */ '../views/statistic/Index');
 const EditForm = () => import(/* webpackChunkName: "create" */ '../views/edit/EditForm');
+const Upgrade = () => import(/* webpackChunkName: "create" */ '../views/mine/Upgrade');
 // const Statistic = () => import(/* webpackChunkName: "create" */ '../layout/Statistic');
 // const Recovery = () => import(/* webpackChunkName: "create" */ '../views/mine/Recovery');
 // const Released = () => import(/* webpackChunkName: "create" */ '../views/mine/Released');
@@ -32,6 +33,7 @@ const mainHome = new VueRouter({
         { path: '/edit_form/:id', component: EditForm ,meta: {title: '编辑问卷'}},
         { path: '/statistic/:id', component: StatisticForm ,meta: {title: '统计分析'}},
         { path: '/my_profile', component: MyProfile ,meta: {title: '个人信息'}},
+        { path: '/upgrade', component: Upgrade ,meta: {title: '开通会员'}},
         // { path: '/released', component: Released },
         // { path: '/recovery', component: Recovery }
       // ]

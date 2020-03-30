@@ -26,6 +26,7 @@
                                 <span class="nickname">Fendy</span>
                             </template>
                             <el-menu-item index="my_profile">个人信息</el-menu-item>
+                            <el-menu-item index="upgrade">升级会员</el-menu-item>
                             <el-menu-item @click="logout" index="/logout">退 出</el-menu-item>
                         </el-submenu>
                     </el-menu>

@@ -19,3 +19,10 @@ function getFormId($question_id)
 {
     return (new Form())->getForm($question_id)->id;
 }
+
+function createRandom($length)
+{
+    $str="QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
+    $name=substr(str_shuffle($str),26,$length);
+    return $name;
+}

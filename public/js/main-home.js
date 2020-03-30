@@ -3737,6 +3737,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
@@ -85205,6 +85206,10 @@ var render = function() {
                             [_vm._v("个人信息")]
                           ),
                           _vm._v(" "),
+                          _c("el-menu-item", { attrs: { index: "upgrade" } }, [
+                            _vm._v("升级会员")
+                          ]),
+                          _vm._v(" "),
                           _c(
                             "el-menu-item",
                             {
@@ -103134,6 +103139,10 @@ var StatisticForm = function StatisticForm() {
 
 var EditForm = function EditForm() {
   return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/edit/EditForm */ "./resources/js/views/edit/EditForm.vue"));
+};
+
+var Upgrade = function Upgrade() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/Upgrade */ "./resources/js/views/mine/Upgrade.vue"));
 }; // const Statistic = () => import(/* webpackChunkName: "create" */ '../layout/Statistic');
 // const Recovery = () => import(/* webpackChunkName: "create" */ '../views/mine/Recovery');
 // const Released = () => import(/* webpackChunkName: "create" */ '../views/mine/Released');
@@ -103181,6 +103190,12 @@ var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     component: MyProfile,
     meta: {
       title: '个人信息'
+    }
+  }, {
+    path: '/upgrade',
+    component: Upgrade,
+    meta: {
+      title: '开通会员'
     }
   } // { path: '/released', component: Released },
   // { path: '/recovery', component: Recovery }

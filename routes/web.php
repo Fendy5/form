@@ -49,6 +49,8 @@ Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
     Route::post('/statistic', 'StatisticController@index');
     Route::post('/get_profile', 'UserController@getUser');
     Route::post('/save_profile', 'UserController@saveUser');
+    Route::post('/pay', 'PayController@index');
+    Route::post('/pay/query', 'PayController@query');
     Route::get('/logout', 'LoginController@logout');
 });
 

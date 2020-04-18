@@ -39,6 +39,10 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereWechatId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereWeiboId($value)
  * @mixin \Eloquent
+ * @property float $balance
+ * @property int $vip
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereVip($value)
  */
 class User extends Authenticatable
 {

@@ -29,6 +29,13 @@ use function getUserId;
  * @mixin \Eloquent
  * @property string $question_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Form whereQuestionId($value)
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Form onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Form whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Form withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Form withoutTrashed()
  */
 class Form extends Model
 {

@@ -10,6 +10,7 @@ const MyProfile = () => import(/* webpackChunkName: "create" */ '../views/mine/M
 const StatisticForm = () => import(/* webpackChunkName: "create" */ '../views/statistic/Index');
 const EditForm = () => import(/* webpackChunkName: "create" */ '../views/edit/EditForm');
 const Upgrade = () => import(/* webpackChunkName: "create" */ '../views/mine/Upgrade');
+const Order = () => import(/* webpackChunkName: "create" */ '../views/mine/Order');
 // const Statistic = () => import(/* webpackChunkName: "create" */ '../layout/Statistic');
 // const Recovery = () => import(/* webpackChunkName: "create" */ '../views/mine/Recovery');
 // const Released = () => import(/* webpackChunkName: "create" */ '../views/mine/Released');
@@ -21,10 +22,6 @@ Vue.use(VueRouter);
 
 const mainHome = new VueRouter({
   routes: [
-    // {
-      // path: "/",
-      // component: Create,
-      // children: [
         { path: '/form', component: Form },
         { path: '/question', component: Question },
         { path: '/exam', component: Exam },
@@ -34,17 +31,7 @@ const mainHome = new VueRouter({
         { path: '/statistic/:id', component: StatisticForm ,meta: {title: '统计分析'}},
         { path: '/my_profile', component: MyProfile ,meta: {title: '个人信息'}},
         { path: '/upgrade', component: Upgrade ,meta: {title: '开通会员'}},
-        // { path: '/released', component: Released },
-        // { path: '/recovery', component: Recovery }
-      // ]
-    // }
-    // {
-    //   path: '/statistic',
-    //   component: Statistic,
-    //   children: [
-    //     { path: '/:id', component: StatisticForm ,meta: {title: '统计分析'}},
-    //   ]
-    // }
+        { path: '/order', component: Order ,meta: {title: '交易信息'}},
   ]
 });
 mainHome.beforeEach((to, from, next) => {

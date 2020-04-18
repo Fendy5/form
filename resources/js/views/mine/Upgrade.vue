@@ -58,7 +58,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-dialog width="200px" :center="true" :show-close="false"  title="扫描支付" :visible.sync="payCode">
+      <el-dialog @close="closePay" width="200px" :center="true" :show-close="false"  title="扫描支付" :visible.sync="payCode">
         <div class="device-preview">
           <qriously :value="codeUrl" :size="150" />
         </div>
@@ -73,10 +73,14 @@ export default {
     return {
       payCode: false,
       codeUrl:"weixin://wxpay/bizpayurl?pr=2OyXz4k",
-      out_trade_no:''
+      out_trade_no:'',
+      timeout: ''
     }
   },
   methods:{
+    closePay() {
+      clearInterval(this.timeout);
+    },
     pay(fee) {
       this.$http.post('pay', {fee: fee}).then((res) => {
         if (res.status === 200 && res.data.code === 1) {
@@ -84,12 +88,12 @@ export default {
           this.out_trade_no = res.data['out_trade_no'];
           this.payCode = true;
           let _this = this;
-          let timeout=setInterval(function () {
+           this.timeout=setInterval(function () {
             _this.$http.post('pay/query', {out_trade_no: _this.out_trade_no}).then((res) => {
               if (res.status === 200 && res.data['trade_state'] === 'SUCCESS') {
                 _this.payCode = false;
                 _this.$message.success('支付成功');
-                clearTimeout(timeout);
+                clearInterval(_this.timeout);
               }
             }).catch(reason => {
               _this.$message.error('网络错误')

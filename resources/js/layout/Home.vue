@@ -6,8 +6,8 @@
                     <a href="/"><img src="../asset/images/logo.png" alt=""></a>
                     <span>秋霁问卷</span>
                 </el-col>
-                <el-col :span="12">
-                    <el-menu router class="el-menu-demo" mode="horizontal" >
+                <el-col :span="16">
+                    <el-menu router mode="horizontal" >
                         <el-submenu index="1">
                             <template slot="title">创建问卷</template>
                             <el-menu-item index="/question">在线问卷</el-menu-item>
@@ -16,19 +16,16 @@
                             <el-menu-item index="/exam">考试检测</el-menu-item>
                         </el-submenu>
                       <el-menu-item index="/my_question">我的问卷</el-menu-item>
-                    </el-menu>
-                </el-col>
-                <el-col :span="4">
-                    <el-menu router class="el-menu-demo" mode="horizontal">
-                        <el-submenu index="4">
-                            <template slot="title">
-                                <el-avatar shape="circle" src="/images/avatar.jpg"></el-avatar>
-                                <span class="nickname">Fendy</span>
-                            </template>
-                            <el-menu-item index="my_profile">个人信息</el-menu-item>
-                            <el-menu-item index="upgrade">升级会员</el-menu-item>
-                            <el-menu-item @click="logout" index="/logout">退 出</el-menu-item>
-                        </el-submenu>
+                      <el-submenu  index="3">
+                        <template slot="title">
+                          <el-avatar shape="circle" src="/images/avatar.jpg"></el-avatar>
+                          <span class="nickname">Fendy</span>
+                        </template>
+                        <el-menu-item index="/my_profile">个人信息</el-menu-item>
+                        <el-menu-item index="/upgrade">升级会员</el-menu-item>
+                        <el-menu-item index="/order">交易信息</el-menu-item>
+                        <el-menu-item @click="logout" index="/logout">退 出</el-menu-item>
+                      </el-submenu>
                     </el-menu>
                 </el-col>
             </el-row>

@@ -3735,9 +3735,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
@@ -85119,14 +85116,11 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "el-col",
-                { attrs: { span: 12 } },
+                { attrs: { span: 16 } },
                 [
                   _c(
                     "el-menu",
-                    {
-                      staticClass: "el-menu-demo",
-                      attrs: { router: "", mode: "horizontal" }
-                    },
+                    { attrs: { router: "", mode: "horizontal" } },
                     [
                       _c(
                         "el-submenu",
@@ -85159,28 +85153,11 @@ var render = function() {
                       _vm._v(" "),
                       _c("el-menu-item", { attrs: { index: "/my_question" } }, [
                         _vm._v("我的问卷")
-                      ])
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-col",
-                { attrs: { span: 4 } },
-                [
-                  _c(
-                    "el-menu",
-                    {
-                      staticClass: "el-menu-demo",
-                      attrs: { router: "", mode: "horizontal" }
-                    },
-                    [
+                      ]),
+                      _vm._v(" "),
                       _c(
                         "el-submenu",
-                        { attrs: { index: "4" } },
+                        { attrs: { index: "3" } },
                         [
                           _c(
                             "template",
@@ -85202,12 +85179,16 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "el-menu-item",
-                            { attrs: { index: "my_profile" } },
+                            { attrs: { index: "/my_profile" } },
                             [_vm._v("个人信息")]
                           ),
                           _vm._v(" "),
-                          _c("el-menu-item", { attrs: { index: "upgrade" } }, [
+                          _c("el-menu-item", { attrs: { index: "/upgrade" } }, [
                             _vm._v("升级会员")
+                          ]),
+                          _vm._v(" "),
+                          _c("el-menu-item", { attrs: { index: "/order" } }, [
+                            _vm._v("交易信息")
                           ]),
                           _vm._v(" "),
                           _c(
@@ -103143,6 +103124,10 @@ var EditForm = function EditForm() {
 
 var Upgrade = function Upgrade() {
   return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/Upgrade */ "./resources/js/views/mine/Upgrade.vue"));
+};
+
+var Order = function Order() {
+  return Promise.all(/*! import() | create */[__webpack_require__.e("vendors~create"), __webpack_require__.e("create")]).then(__webpack_require__.bind(null, /*! ../views/mine/Order */ "./resources/js/views/mine/Order.vue"));
 }; // const Statistic = () => import(/* webpackChunkName: "create" */ '../layout/Statistic');
 // const Recovery = () => import(/* webpackChunkName: "create" */ '../views/mine/Recovery');
 // const Released = () => import(/* webpackChunkName: "create" */ '../views/mine/Released');
@@ -103151,11 +103136,7 @@ var Upgrade = function Upgrade() {
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  routes: [// {
-  // path: "/",
-  // component: Create,
-  // children: [
-  {
+  routes: [{
     path: '/form',
     component: Form
   }, {
@@ -103197,18 +103178,13 @@ var mainHome = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     meta: {
       title: '开通会员'
     }
-  } // { path: '/released', component: Released },
-  // { path: '/recovery', component: Recovery }
-  // ]
-  // }
-  // {
-  //   path: '/statistic',
-  //   component: Statistic,
-  //   children: [
-  //     { path: '/:id', component: StatisticForm ,meta: {title: '统计分析'}},
-  //   ]
-  // }
-  ]
+  }, {
+    path: '/order',
+    component: Order,
+    meta: {
+      title: '交易信息'
+    }
+  }]
 });
 mainHome.beforeEach(function (to, from, next) {
   /* 路由发生变化修改页面title */

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\User;
 use Config;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
@@ -13,12 +14,13 @@ use Illuminate\Http\Request;
 use function date;
 use function dd;
 use function getUserId;
+use function response;
 use function str_shuffle;
 use function substr;
 
 class PayController extends Controller
 {
-    //
+    //微信支付
     public function index()
     {
         $app = Factory::payment(config('wechat.payment.default'));
@@ -57,7 +59,19 @@ class PayController extends Controller
     public function query()
     {
         $app = Factory::payment(config('wechat.payment.default'));
-        return $app->order->queryByOutTradeNumber(\request('out_trade_no'));
+        $shid = \request('out_trade_no');
+        $res = $app->order->queryByOutTradeNumber($shid);
+        if ($res['trade_state'] == 'SUCCESS') {
+            Order::where(['shid' => $shid])->update(['status' => 1]);
+            User::where(['id' => getUserId()])->update(['vip' => 1]);
+            return response()->json([
+                'trade_state'=>'SUCCESS'
+            ]);
+        }else{
+            return response()->json([
+                'trade_state'=>'NOPAY'
+            ]);
+        }
     }
 
 }

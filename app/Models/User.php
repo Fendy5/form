@@ -45,6 +45,10 @@ use function getUserId;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereWechatId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereWeiboId($value)
  * @mixin \Eloquent
+ * @property float $balance
+ * @property int $vip
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereVip($value)
  */
 class User extends Model
 {

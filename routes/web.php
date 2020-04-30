@@ -34,6 +34,7 @@ use function MongoDB\BSON\toJSON;
 
 Route::get('/login', 'Home\LoginController@login');
 Route::post('/login', 'Home\LoginController@login_post');
+Route::get('/login/wechat', 'Home\LoginController@wechatLogin');
 Route::post('/sign_up', 'Home\LoginController@sign_up');
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use function file_get_contents;
 use function session;
 use function view;
 
@@ -16,6 +17,7 @@ class LoginController extends Controller
         return view('home.login.login');
     }
 
+    // 登录post请求方法
     public function login_post()
     {
         $res = (new User())->verifyLogin(\request('email'),\request('password'));
@@ -48,6 +50,12 @@ class LoginController extends Controller
             $data=['code' => 0, 'msg'=>$user];
         }
         return $data;
+    }
+
+    // 微信登录
+    public function wechatLogin()
+    {
+        return \request('openid');
     }
 
     public function logout()

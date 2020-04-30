@@ -21,7 +21,7 @@
           <form action="#">
             <h1>登 录</h1>
             <div class="social-container">
-              <a href="#" class="social"><i class="iconfont icon-wechat" /></a>
+              <a href="/login/wechat" class="social"><i class="iconfont icon-wechat" /></a>
               <a href="#" class="social"><i class="iconfont icon-weibo" /></a>
               <a href="#" class="social"><i class="iconfont icon-qq" /></a>
             </div>

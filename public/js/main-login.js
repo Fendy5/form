@@ -65808,7 +65808,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "social-container" }, [
-      _c("a", { staticClass: "social", attrs: { href: "#" } }, [
+      _c("a", { staticClass: "social", attrs: { href: "/login/wechat" } }, [
         _c("i", { staticClass: "iconfont icon-wechat" })
       ]),
       _vm._v(" "),

@@ -315,9 +315,6 @@ export default {
         this.formUrl = `http://192.168.31.241:8081/s/${res.data.formUrl}`;
       }));
       this.devicePreview = true;
-        // let res = await this.$http.post('save_data', this.form);
-        // if (res.status !== 200) return this.$message.error('提交失败');
-        // console.log(res);
     },
     createRandomStr() {
       return Math.random().toString(36).slice(-8)

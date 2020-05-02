@@ -5592,7 +5592,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".home-container[data-v-139e0094] {\n  height: 100%;\n}\n.header[data-v-139e0094] {\n  min-height: 60px;\n  background-color: white;\n}\n.header-logo[data-v-139e0094] {\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.logo > a > img[data-v-139e0094] {\n  width: 30px;\n  height: 30px;\n  margin-right: 5px;\n}\n.logo > span[data-v-139e0094] {\n  color: #209add;\n}", ""]);
+exports.push([module.i, ".home-container[data-v-139e0094] {\n  height: 100%;\n}\n.header[data-v-139e0094] {\n  min-height: 60px;\n  background-color: white;\n  box-shadow: 0 0 45px rgba(0, 0, 0, 0.2);\n}\n.header-logo[data-v-139e0094] {\n  -webkit-box-pack: center;\n          justify-content: center;\n}\n.logo > a > img[data-v-139e0094] {\n  width: 30px;\n  height: 30px;\n  margin-right: 5px;\n}\n.logo > span[data-v-139e0094] {\n  color: #209add;\n}\n.el-card[data-v-139e0094] {\n  box-shadow: 0 0 45px rgba(0, 0, 0, 0.2) !important;\n}", ""]);
 
 // exports
 
@@ -5669,7 +5669,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "html,body,#app {\n    height: 100%;\n    margin: 0;\n    padding: 0;\n    background: #f7f7f7;\n}\n.el-breadcrumb {\n    margin-bottom: 15px;\n    /*font-size: 12px;*/\n}\n.el-card {\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;\n}\n.el-table {\n    margin-top: 15px;\n}\n.el-pagination {\n    margin-top: 10px;\n}\n.el-col {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center;\n    font-size: 18px;\n}\n.el-col img {\n    width: 50px;\n    height: 50px;\n}\n.el-header {\n    padding: 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;\n}\n.el-footer {\n    padding: 0;\n    box-shadow: 0 -0.5px 1px rgba(0, 0, 0, 0.15) !important;\n    background-color: white;\n    text-align: center;\n    line-height: 60px;\n}\n.nickname {\n    color: #909399;\n    font-size: 16px;\n    margin-left: 8px;\n}\n.el-col {\n    -webkit-box-pack: center;\n            justify-content: center;\n}\n.mobile-title {\n    margin: 0;\n    padding: 32px 16px 16px;\n    color: rgba(69, 90, 100, 0.6);\n    font-weight: normal;\n    font-size: 14px;\n    line-height: 16px;\n}\n", ""]);
+exports.push([module.i, "html,body,#app {\n    height: 100%;\n    margin: 0;\n    padding: 0;\n    background: #f7f7f7;\n}\n.el-breadcrumb {\n    margin-bottom: 15px;\n    /*font-size: 12px;*/\n}\n.el-card {\n    box-shadow: 0 0 45px rgba(0,0,0,.2) !important;\n    border-radius: 10px;\n}\n.el-table {\n    margin-top: 15px;\n}\n.el-pagination {\n    margin-top: 10px;\n}\n.el-col {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center;\n    font-size: 18px;\n}\n.el-col img {\n    width: 50px;\n    height: 50px;\n}\n.el-header {\n    padding: 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;\n}\n.el-footer {\n    padding: 0;\n    box-shadow: 0 -0.5px 1px rgba(0, 0, 0, 0.15) !important;\n    background-color: white;\n    text-align: center;\n    line-height: 60px;\n}\n.nickname {\n    color: #909399;\n    font-size: 16px;\n    margin-left: 8px;\n}\n.el-col {\n    -webkit-box-pack: center;\n            justify-content: center;\n}\n.mobile-title {\n    margin: 0;\n    padding: 32px 16px 16px;\n    color: rgba(69, 90, 100, 0.6);\n    font-weight: normal;\n    font-size: 14px;\n    line-height: 16px;\n}\n", ""]);
 
 // exports
 
@@ -103219,7 +103219,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = 'http://192.168.31.241:8081/';
+axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = 'http://192.168.1.102:8081/';
 axios__WEBPACK_IMPORTED_MODULE_1___default.a.interceptors.request.use(function (config) {
   nprogress__WEBPACK_IMPORTED_MODULE_2___default.a.start();
   return config;

@@ -8,7 +8,7 @@
         <div v-if="form.formStatus==='0'"  class="preview-warn">
           该问卷为临时问卷，只适合于预览时使用~
         </div>
-        <h2 style="margin-top: 40px;">{{form.title}}</h2>
+        <h2 style="margin-top: 45px;color: white">{{form.title}}</h2>
         <div v-for="(items,index) in form.content" :key="index" class="preview-item">
           <van-radio-group  v-model="answer.content[index].options[0]" v-if="items.type === 'single-choose'" >
 

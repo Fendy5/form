@@ -10,6 +10,8 @@ import '@/utils/request'
 import '@/asset/fonts/iconfont.css'
 import '@/asset/css/global.css'
 import VueQriously from 'vue-qriously'
+
+
 Vue.use(VueQriously);
 
 const app = new Vue({

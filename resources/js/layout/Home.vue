@@ -67,8 +67,9 @@
         height: 100%;
     }
     .header {
-        min-height: 60px;
-        background-color: white;
+      min-height: 60px;
+      background-color: white;
+      box-shadow: 0 0 45px rgba(0,0,0,.2)
     }
     .header-logo {
         justify-content: center;
@@ -81,4 +82,7 @@
   .logo > span {
     color: #209add;
   }
+    .el-card {
+      box-shadow: 0 0 45px rgba(0,0,0,.2) !important;
+    }
 </style>

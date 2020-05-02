@@ -93,6 +93,7 @@ export default {
               if (res.status === 200 && res.data['trade_state'] === 'SUCCESS') {
                 _this.payCode = false;
                 _this.$message.success('支付成功');
+                _this.$router.push({path: '/order'});
                 clearInterval(_this.timeout);
               }
             }).catch(reason => {

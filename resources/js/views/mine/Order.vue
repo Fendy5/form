@@ -57,7 +57,7 @@ export default {
     width: 80%;
   }
   .el-card {
-    margin: 15px 0;
+    margin: 40px 0 !important;
   }
   .od-header {
     display: flex;

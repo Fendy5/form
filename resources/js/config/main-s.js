@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 Vue.component('display', S);
-axios.defaults.baseURL = 'http://192.168.31.241:8081/';
+axios.defaults.baseURL = 'http://192.168.1.102:8081/';
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
 

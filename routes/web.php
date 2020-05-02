@@ -28,6 +28,7 @@
 //
 use App\Models\Answer;
 use App\Models\Form;
+use App\Models\User;
 use function EasyWeChat\Kernel\Support\str_random;
 use function GuzzleHttp\Psr7\str;
 use function MongoDB\BSON\toJSON;
@@ -35,7 +36,11 @@ use function MongoDB\BSON\toJSON;
 Route::get('/login', 'Home\LoginController@login');
 Route::post('/login', 'Home\LoginController@login_post');
 Route::get('/login/wechat', 'Home\LoginController@wechatLogin');
+Route::get('/wechat_login', 'Home\LoginController@wechat');
+Route::post('/verifyQrCodeLogin', 'Home\LoginController@verifyQrCodeLogin');
 Route::post('/sign_up', 'Home\LoginController@sign_up');
+Route::post('/send_mail', 'Home\LoginController@sendEmail');
+Route::post('/change_password', 'Home\LoginController@changePassword');
 
 
 Route::group(['namespace'=>'Home','middleware'=>['login']], function () {
@@ -61,6 +66,8 @@ Route::post('/s','Home\FormController@getData');
 Route::post('/submit_answer','Home\AnswerController@submitAnswer');
 
 Route::get('/test', function () {
+
+    $user=User::where(['email'=>'zf@fendy5.cn'])->first();
 
     $id = 'zs1vmArStalUhYwL';
     $form = Form::where('question_id',$id)->first();

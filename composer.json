@@ -14,7 +14,8 @@
         "laravel/framework": "^6.11",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
-        "overtrue/laravel-wechat": "~5.0"
+        "overtrue/laravel-wechat": "~5.0",
+        "phpmailer/phpmailer": "^6.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",

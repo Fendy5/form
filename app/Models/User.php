@@ -12,7 +12,10 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use function getUserId;
+use function request;
 
 /**
  * App\Models\User
@@ -56,7 +59,7 @@ class User extends Model
 
     public function createUser(array $data)
     {
-        $user = $this->where('name', $data['name'])->first();
+        $user = $this->where('email', $data['email'])->first();
         if (!$user) {
             $res = $this->create($data)?'ok':'注册失败';
         } else {
@@ -79,4 +82,15 @@ class User extends Model
     {
         return $this->where(['id' => getUserId()])->update($userInfo);
     }
+
+    public function getUserByWechatId($openid)
+    {
+        return $this->where(['wechat_id' => $openid])->first();
+    }
+
+    public function getUserByAuthId($authId)
+    {
+        return $this->where(['auth_id' => $authId])->first();
+    }
+
 }

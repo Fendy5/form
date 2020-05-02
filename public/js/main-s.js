@@ -25007,9 +25007,11 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("h2", { staticStyle: { "margin-top": "40px" } }, [
-                      _vm._v(_vm._s(_vm.form.title))
-                    ]),
+                    _c(
+                      "h2",
+                      { staticStyle: { "margin-top": "45px", color: "white" } },
+                      [_vm._v(_vm._s(_vm.form.title))]
+                    ),
                     _vm._v(" "),
                     _vm._l(_vm.form.content, function(items, index) {
                       return _c(
@@ -37426,7 +37428,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 Vue.component('display', _views_s_Index__WEBPACK_IMPORTED_MODULE_0__["default"]);
-axios__WEBPACK_IMPORTED_MODULE_3___default.a.defaults.baseURL = 'http://192.168.31.241:8081/';
+axios__WEBPACK_IMPORTED_MODULE_3___default.a.defaults.baseURL = 'http://192.168.1.102:8081/';
 Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_3___default.a;
 Vue.config.productionTip = false;
 var app = new Vue({

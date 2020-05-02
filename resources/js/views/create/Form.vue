@@ -8,7 +8,10 @@
                 <div @click="randomChoose" class="choose-item">不定选</div>
                 <div @click="textarea" class="choose-item">文本框</div>
             </div>
-
+          <div class="preview-handle">
+            <el-button @click="saveDate">设备预览</el-button>
+            <el-button @click="release" type="primary">保存并投放</el-button>
+          </div>
         </el-col>
         <el-col :span="12">
             <div id="main">
@@ -115,32 +118,47 @@
         </el-col>
         <el-col :span="6">
             <div class="preview">
-                <div class="preview-main">
-                    <h2>{{form.title}}</h2>
-                      <div v-for="(items,index) in form.content" :key="index" class="preview-item">
-                        <van-radio-group v-if="items.type !== 'textarea'">
-                          <div class="preview-title">{{index+1}}、{{items.title}}</div>
-                          <van-cell-group  v-for="(item,idx) in items.options" :key="idx">
-                            <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.text" clickable @click="radio = '2'">
-                              <van-radio slot="right-icon" name="2" />
-                            </van-cell>
-                          </van-cell-group>
-                        </van-radio-group>
-                        <div v-else class="textarea">
-                          <div class="preview-title">{{index+1}}、{{items.title}}</div>
-                          <van-field
-                            :rows="5"
-                            autosize
-                            type="textarea"
-                            placeholder="请输入答案"
-                          />
-                        </div>
-                      </div>
+              <div class="iphone">
+                <div class="iphone-top">
+                  <span class="camera"></span>
+                  <span class="sensor"></span>
+                  <span class="speaker"></span>
                 </div>
-                <div style="margin: 20px 0;text-align: center">
-                    <el-button @click="saveDate">设备预览</el-button>
-                    <el-button type="primary">保存并发放</el-button>
-                 </div>
+                <div class="top-bar"></div>
+                <div class="iphone-screen">
+                  <h2>{{form.title}}</h2>
+                  <div v-for="(items,index) in form.content" :key="index" class="preview-item">
+                    <van-radio-group v-if="items.type !== 'textarea'">
+                      <div class="preview-title">{{index+1}}、{{items.title}}</div>
+                      <van-cell-group  v-for="(item,idx) in items.options" :key="idx">
+                        <van-cell :title="String.fromCharCode(64 + parseInt(idx+1))+'、'+item.text" clickable @click="radio = '2'">
+                          <van-radio slot="right-icon" name="2" />
+                        </van-cell>
+                      </van-cell-group>
+                    </van-radio-group>
+                    <div v-else class="textarea">
+                      <div class="preview-title">{{index+1}}、{{items.title}}</div>
+                      <van-field
+                        :rows="5"
+                        autosize
+                        type="textarea"
+                        placeholder="请输入答案"
+                      />
+                    </div>
+                  </div>
+
+                </div>
+                <div class="buttons">
+                  <span class="on-off"></span>
+                  <span class="sleep"></span>
+                  <span class="up"></span>
+                  <span class="down"></span>
+                </div>
+                <div class="bottom-bar"></div>
+                <div class="iphone-bottom">
+                  <span></span>
+                </div>
+              </div>
               <el-dialog :modal-append-to-body="false" title="设备预览" :visible.sync="devicePreview">
                 <div class="device-preview">
                   <qriously :value="formUrl" :size="150" />
@@ -166,7 +184,7 @@ export default {
   },
   data () {
       return {
-        formUrl: 'http://192.168.31.241:8081/s/7yc4t4HDxJ4GxLTI',
+        formUrl: 'http://192.168.1.102:8081/s/7yc4t4HDxJ4GxLTI',
         devicePreview: false,
         form: {
             title: '',
@@ -312,7 +330,7 @@ export default {
     saveDate() {
       this.$http.post('save_data', this.form).then((res => {
         if (res.status !== 200) return this.$message.error('提交失败');
-        this.formUrl = `http://192.168.31.241:8081/s/${res.data.formUrl}`;
+        this.formUrl = `http://192.168.1.102:8081/s/${res.data.formUrl}`;
       }));
       this.devicePreview = true;
     },
@@ -324,6 +342,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  h2 {
+    text-align: center;
+  }
   .form-url {
     width: 450px;
   }
@@ -339,25 +360,14 @@ export default {
   .create {
       /*position: relative;*/
   }
-  .preview-main {
-      box-sizing: border-box;
-      min-height: 70vh;
-      border-radius: 20px;
-      height: 76px;
-      line-height: 56px;
-      text-align: center;
-      padding: 10px;
-      overflow:scroll;
-      -moz-box-shadow:0px 1px 10px #8F69DB; -webkit-box-shadow:0px 1px 10px #8F69DB; box-shadow:0px 1px 10px #8F69DB;
-  }
   .preview {
       position: fixed;
       width: 20%;
-      margin: 370px -50px;
+      margin: 380px -80px;
       padding: 46px 20px 20px;
   }
   .preview-item {
-      border-radius: 10px;
+      border-radius: 15px;
       background-color: #ffffff;
       margin: 10px 0;
   }
@@ -406,5 +416,57 @@ export default {
   }
   .choose-item:hover {
       background-color: #a8c5ff;
+  }
+  .iphone {
+    box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #999, 0 0 30px 0px rgba(0, 0, 0, 0.7);
+    border: 5px solid #d9dbdc;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 50px;
+    height: 877px;
+    width: 423px;
+    position: relative;
+    margin: 30px auto;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+  .iphone-top {
+    padding: 5px 110px 40px;
+    position: relative;
+  }
+  .iphone-top .speaker {
+    display: block;
+    width: 70px;
+    height: 6px;
+    margin: 0 auto;
+    border-radius: 6px;
+    background: #292728;
+  }
+  .iphone-top .camera {
+    display: block;
+    margin: 0 auto;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-bottom: 13px;
+    background: #333;
+  }
+  .iphone-top .sensor {
+    display: block;
+    width: 15px;
+    height: 15px;
+    float: left;
+    background: #333;
+    margin-top: -5px;
+    border-radius: 50%;
+  }
+  .preview-handle {
+    margin: 300px 0px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+  }
+  .preview-handle > .el-button {
+    margin: 10px 0;
   }
 </style>

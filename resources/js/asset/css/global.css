@@ -9,7 +9,8 @@ html,body,#app {
     /*font-size: 12px;*/
 }
 .el-card {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0 45px rgba(0,0,0,.2) !important;
+    border-radius: 10px;
 }
 .el-table {
     margin-top: 15px;
